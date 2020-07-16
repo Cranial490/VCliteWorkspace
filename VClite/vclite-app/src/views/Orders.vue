@@ -1,0 +1,5 @@
+<template>
+  <div class="content">
+    <h1>Orders</h1>
+  </div>
+</template>

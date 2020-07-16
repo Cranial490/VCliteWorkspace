@@ -1,0 +1,7 @@
+#python bytecode
+*.pyc
+
+#folders
+venv/
+node_modules/
+*.DS_Store
