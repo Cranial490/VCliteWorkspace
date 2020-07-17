@@ -8,7 +8,6 @@
 	  </b-row>
 	</b-container>
 	<hr>
-	
   </div>
 </template>
 
@@ -40,7 +39,7 @@ export default {
   	axios.get("http://127.0.0.1:8000/apiv0/bids/", {params: {share_id: this.share_id}})
       .then(res => (this.bids = res.data))  
       .catch(err => console.log(err));
-  	}
+  	},
   },
   created() {
   	this.getBids();

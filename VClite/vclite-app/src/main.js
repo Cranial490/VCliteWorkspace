@@ -10,6 +10,7 @@ import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'w3-css/w3.css';
 
 Vue.use(Vuex)
 

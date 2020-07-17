@@ -1,6 +1,27 @@
 <template>
   <b-container class="orderWindow">
   	<div>
+      <!-- <TEST MODAL> -->
+      <div>
+       <b-modal ref="buy-modal" hide-footer title="Using Component Methods">
+          <div class="d-block text-center">
+            <h3>BUY</h3>
+          </div>
+          <b-button class="mt-3" variant="outline-info" block @click="BuyOrderConfirm()">Confirm Order</b-button>
+          <b-button class="mt-3" variant="outline-danger" block @click="CancelOrder()">Cancel</b-button>
+        </b-modal>
+      </div>
+      <div>
+       <b-modal ref="sell-modal" hide-footer title="Using Component Methods">
+          <div class="d-block text-center">
+            <h3>SELL</h3>
+          </div>
+          <b-button class="mt-3" variant="outline-info" block @click="SellOrderConfirm()">Confirm Order</b-button>
+          <b-button class="mt-3" variant="outline-danger" block @click="CancelOrder()">Cancel</b-button>
+        </b-modal>
+      </div>
+      <!-- <MODAL TEST> -->
+
       <b-tabs :value="tabIndex" content-class="mt-3" fill>
         <b-tab title="Buy" active>
         <form>
@@ -36,6 +57,7 @@ export default {
       orderQty: 0,
       buyOrderPrice: this.$store.state.currBuyPrice,
       sellOrderPrice: 0,
+      modalShow: false,
     }
   },
   components: {
@@ -58,23 +80,27 @@ export default {
       return this.$store.state.currSellPrice;
     },
     placeBuyOrder() {
-        var orderPrice = document.getElementById('buypriceId').value;
-        alert(orderPrice);
-        this.$store.commit("updateCurrBuyPrice", orderPrice);
-        this.$bvToast.toast("Order Placed", {
-          title: 'BUY',
-          autoHideDelay: 3000,
-        })
-      },
+      this.$refs['buy-modal'].show()
+      var orderPrice = document.getElementById('buypriceId').value;
+      this.$store.commit("updateCurrBuyPrice", orderPrice);
+
+    },
     placeSellOrder() {
-        var orderPrice = document.getElementById('sellpriceId').value;
-        alert(orderPrice);
-        this.$store.commit("updateCurrSellPrice", orderPrice);
-        this.$bvToast.toast("Order Placed", {
-          title: 'SELL',
-          autoHideDelay: 3000,
-        })
-      }
+      this.$refs['sell-modal'].show()
+      var orderPrice = document.getElementById('sellpriceId').value;
+      this.$store.commit("updateCurrSellPrice", orderPrice);
+    },
+    BuyOrderConfirm() {
+      this.$refs['buy-modal'].hide();
+      alert("Buy Order Placed");
+    },
+    SellOrderConfirm() {
+      this.$refs['sell-modal'].hide();
+      alert("Sell Order Placed");
+    },
+    CancelOrder() {
+      this.$refs['my-modal'].hide();
+    }
   },
   computed: {
     buy_price: {
@@ -113,5 +139,13 @@ export default {
     width:100px;
     text-align: left;
     margin-right: 5px;
-}
+  }
+  .place-order {
+    width: 50%;
+    margin: 0 auto;
+  }
+  .closeBtn {
+    width:10%;
+  }
+
 </style>
