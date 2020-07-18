@@ -3,7 +3,7 @@
   	<div>
       <!-- <TEST MODAL> -->
       <div>
-       <b-modal ref="buy-modal" hide-footer title="Using Component Methods">
+       <b-modal ref="buy-modal" hide-footer title="Order Summary">
           <div class="d-block text-center">
             <h3>BUY</h3>
           </div>
@@ -12,7 +12,7 @@
         </b-modal>
       </div>
       <div>
-       <b-modal ref="sell-modal" hide-footer title="Using Component Methods">
+       <b-modal ref="sell-modal" hide-footer title="Order Summary">
           <div class="d-block text-center">
             <h3>SELL</h3>
           </div>
@@ -27,9 +27,9 @@
         <form>
           <h4>{{  }}</h4>
           <label>Price:</label>
-          <input type="number" name="last" min=0 id="buypriceId" v-model="buy_price"><br/>
+          <input ref="buyPriceInput" type="number" name="last" min=0 id="buypriceId" v-model="buy_price"><br/>
           <label>Qty:</label>
-          <input type="number" name="email" min=1><br/>
+          <input ref="buyQtyInput" type="number" name="email" min=1><br/>
           <b-button class="placer" block variant="success" size="lg" @click="placeBuyOrder()">BUY</b-button>
         </form>
       </b-tab>
@@ -37,9 +37,9 @@
         <form>
           <h4>{{  }}</h4>
           <label>Price:</label>
-          <input type="number" name="last" min=0 id="sellpriceId" v-model="sell_price"><br/>
+          <input ref="sellPriceInput" type="number" name="last" min=0 id="sellpriceId" v-model="sell_price"><br/>
           <label>Qty:</label>
-          <input type="number" name="email" min=1><br/>
+          <input ref="sellQtyInput" type="number" name="email" min=1><br/>
           <b-button class="placer" block variant="danger" size="lg" @click="placeSellOrder()">SELL</b-button>
         </form>
       </b-tab>
@@ -99,7 +99,8 @@ export default {
       alert("Sell Order Placed");
     },
     CancelOrder() {
-      this.$refs['my-modal'].hide();
+      this.$refs['buy-modal'].hide();
+      this.$refs['sell-modal'].hide();
     }
   },
   computed: {
@@ -136,9 +137,9 @@ export default {
 
   label {
     display: inline-block;
-    width:100px;
+    width:50px;
     text-align: left;
-    margin-right: 5px;
+    margin-right: 0px;
   }
   .place-order {
     width: 50%;
