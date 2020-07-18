@@ -16,6 +16,9 @@ Vue.use(Vuex)
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue);
+
+//Event bus for component communication 
+export const bus = new Vue();
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -20,6 +20,7 @@
 
 <script>
 // @ is an alias to /src
+import { bus } from '../main'
 
 export default {
   props: [
@@ -27,8 +28,8 @@ export default {
   ],
   methods: {
   fetchAskPrice(price) {
-     this.$store.commit("updateTransactionTypeIndex", 1);
      this.$store.commit("updateCurrSellPrice", price);
+     bus.$emit('updateTabIndex', 1);
     }
   }
 }

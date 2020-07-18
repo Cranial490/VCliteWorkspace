@@ -10,7 +10,6 @@ export default new Vuex.Store({
   	currBuyPrice: 0,
   	currSellPrice: 0,
   	orderType: "",
-  	tabIndex: 0,
   },
   mutations: {
   	updateShareList(state, shares) {
@@ -26,9 +25,6 @@ export default new Vuex.Store({
   		state.currBuyPrice = 0;
   		state.currSellPrice = 0;
   	},
-  	updateTransactionTypeIndex(state, index) {
-  		state.tabIndex = index;
-  	}
   },
   actions: {
   	getShares({commit}) {

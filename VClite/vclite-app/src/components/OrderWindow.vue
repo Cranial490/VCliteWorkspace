@@ -31,23 +31,22 @@
         </b-modal>
       </div>
       <!-- <MODAL TEST> -->
-
-      <b-tabs :value="tabIndex" content-class="mt-3" fill>
+      <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab title="Buy" active>
         <form>
           <label>Price:</label>
-          <input ref="buyPriceInput" type="number" name="last" min=0 id="buypriceId" v-model="buy_price"><br/>
+          <input ref="buyPriceInput" type="number" name="s-price" min=0 id="buypriceId" v-model="buy_price"><br/>
           <label>Qty:</label>
-          <input ref="buyQtyInput" type="number" name="email" min=1><br/>
+          <input ref="buyQtyInput" type="number" name="s-qty" min=1><br/>
           <b-button class="placer" block variant="success" size="lg" @click="placeBuyOrder()">BUY</b-button>
         </form>
       </b-tab>
       <b-tab title="Sell">
         <form>
           <label>Price:</label>
-          <input ref="sellPriceInput" type="number" name="last" min=0 id="sellpriceId" v-model="sell_price"><br/>
+          <input ref="sellPriceInput" type="number" name="s-price" min=0 id="sellpriceId" v-model="sell_price"><br/>
           <label>Qty:</label>
-          <input ref="sellQtyInput" type="number" name="email" min=1><br/>
+          <input ref="sellQtyInput" type="number" name="s-qty" min=1><br/>
           <b-button class="placer" block variant="danger" size="lg" @click="placeSellOrder()">SELL</b-button>
         </form>
       </b-tab>
@@ -58,6 +57,7 @@
 <script>
 // @ is an alias to /src
 import OrderSummary from '@/components/OrderSummary.vue'
+import { bus } from '../main'
 export default {
   data() {
     return {
@@ -68,6 +68,7 @@ export default {
       sellOrderPrice: 0,
       modalShow: false,
       status: 'not_accepted',
+      tabIndex: 0,
     }
   },
   components: {
@@ -75,8 +76,7 @@ export default {
   },
   created() {
     this.$store.dispatch('getShares'),
-    this.$store.commit("resetPrice"),
-    this.$store.commit("updateTransactionTypeIndex", 0)
+    this.$store.commit("resetPrice")
   },
   methods: {
     filterShare() {
@@ -120,16 +120,18 @@ export default {
     },
       set: function(newValue) {
         this.buyOrderPrice = newValue;
-      }
-
+    }
   },
     sell_price: function() {
       return this.$store.state.currSellPrice;
     },
-    tabIndex: function() {
-      return this.$store.state.tabIndex;
-    }
   },
+  mounted () {
+    bus.$on('updateTabIndex', (data) => {
+      this.tabIndex = data;
+    })
+  }
+
 }
 </script>
 
