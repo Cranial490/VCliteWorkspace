@@ -3,21 +3,31 @@
   	<div>
       <!-- <TEST MODAL> -->
       <div>
-       <b-modal ref="buy-modal" hide-footer title="Order Summary">
+       <b-modal ref="buy-modal" hide-footer title="BUY Order Summary">
           <div class="d-block text-center">
-            <h3>BUY</h3>
+            <h3>Invoice</h3>
+            <OrderSummary 
+            :user="'None'"
+            :price="$store.state.currBuyPrice"
+            :quantity="buyOrderQty"
+            :share="filterShare()[0]"
+            ></OrderSummary>
           </div>
           <b-button class="mt-3" variant="outline-info" block @click="BuyOrderConfirm()">Confirm Order</b-button>
-          <b-button class="mt-3" variant="outline-danger" block @click="CancelOrder()">Cancel</b-button>
         </b-modal>
       </div>
       <div>
-       <b-modal ref="sell-modal" hide-footer title="Order Summary">
+       <b-modal ref="sell-modal" hide-footer title="SELL Order Summary">
           <div class="d-block text-center">
-            <h3>SELL</h3>
+            <h3>Invoice</h3>
+            <OrderSummary 
+            :user="'None'"
+            :price="$store.state.currSellPrice"
+            :quantity="sellOrderQty"
+            :share="filterShare()[0]"
+            ></OrderSummary>
           </div>
           <b-button class="mt-3" variant="outline-info" block @click="SellOrderConfirm()">Confirm Order</b-button>
-          <b-button class="mt-3" variant="outline-danger" block @click="CancelOrder()">Cancel</b-button>
         </b-modal>
       </div>
       <!-- <MODAL TEST> -->
@@ -25,7 +35,6 @@
       <b-tabs :value="tabIndex" content-class="mt-3" fill>
         <b-tab title="Buy" active>
         <form>
-          <h4>{{  }}</h4>
           <label>Price:</label>
           <input ref="buyPriceInput" type="number" name="last" min=0 id="buypriceId" v-model="buy_price"><br/>
           <label>Qty:</label>
@@ -35,7 +44,6 @@
       </b-tab>
       <b-tab title="Sell">
         <form>
-          <h4>{{  }}</h4>
           <label>Price:</label>
           <input ref="sellPriceInput" type="number" name="last" min=0 id="sellpriceId" v-model="sell_price"><br/>
           <label>Qty:</label>
@@ -49,18 +57,21 @@
 </template>
 <script>
 // @ is an alias to /src
-
+import OrderSummary from '@/components/OrderSummary.vue'
 export default {
   data() {
     return {
       share_id: this.$route.params.shareid,
-      orderQty: 0,
+      buyOrderQty: 0,
+      sellOrderQty: 0,
       buyOrderPrice: this.$store.state.currBuyPrice,
       sellOrderPrice: 0,
       modalShow: false,
+      status: 'not_accepted',
     }
   },
   components: {
+    OrderSummary,
   },
   created() {
     this.$store.dispatch('getShares'),
@@ -80,12 +91,15 @@ export default {
       return this.$store.state.currSellPrice;
     },
     placeBuyOrder() {
-      this.$refs['buy-modal'].show()
+      this.buyOrderQty = this.$refs['buyQtyInput'].value;
+      // console.log(this.orderQty);
+      this.$refs['buy-modal'].show();
       var orderPrice = document.getElementById('buypriceId').value;
       this.$store.commit("updateCurrBuyPrice", orderPrice);
 
     },
     placeSellOrder() {
+      this.sellOrderQty = this.$refs['sellQtyInput'].value;
       this.$refs['sell-modal'].show()
       var orderPrice = document.getElementById('sellpriceId').value;
       this.$store.commit("updateCurrSellPrice", orderPrice);
@@ -98,10 +112,6 @@ export default {
       this.$refs['sell-modal'].hide();
       alert("Sell Order Placed");
     },
-    CancelOrder() {
-      this.$refs['buy-modal'].hide();
-      this.$refs['sell-modal'].hide();
-    }
   },
   computed: {
     buy_price: {
@@ -137,7 +147,7 @@ export default {
 
   label {
     display: inline-block;
-    width:50px;
+    width:100px;
     text-align: left;
     margin-right: 0px;
   }
@@ -148,5 +158,17 @@ export default {
   .closeBtn {
     width:10%;
   }
+  .billField{
+  text-align: left;
+}
+.billData {
+  text-align: right;
+}
+.spanText {
+  float:right;
+}
+.checkbox-1{
+  float: left;
+}
 
 </style>

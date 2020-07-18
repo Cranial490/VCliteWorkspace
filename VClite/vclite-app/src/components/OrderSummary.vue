@@ -1,15 +1,21 @@
 <template>
 	<div>
-    <b-button v-b-toggle.sidebar-right>Toggle Sidebar</b-button>
-    <b-sidebar id="sidebar-right" title="Sidebar" right shadow>
-      <div class="px-3 py-2">
-        <p>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
-          in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-        </p>
-        <b-img src="https://picsum.photos/500/500/?image=54" fluid thumbnail></b-img>
+      <div>
+        <b-form-checkbox v-model="checked" name="check-button" switch>
+          ICICI escrow</b>
+        </b-form-checkbox>
       </div>
-    </b-sidebar>
+      <div class="px-3 py-2">
+        <b-list-group>
+          <b-list-group-item><p class="billField">Username:<span class="spanText">None</span></p>   <p class="billData"></p></b-list-group-item>
+          <b-list-group-item><p class="billField">DP Name:<span class="spanText">None</span></p>    </b-list-group-item>
+          <b-list-group-item><p class="billField">DPID:<span class="spanText">None</span></p>       </b-list-group-item>
+          <b-list-group-item><p class="billField">Share:<span class="spanText">{{share.share_name}}</span></p></b-list-group-item>
+          <b-list-group-item><p class="billField">ISI Number:<span class="spanText">None</span></p> </b-list-group-item>
+          <b-list-group-item><p class="billField">Price:<span class="spanText">{{price}}</span></p>      </b-list-group-item>
+          <b-list-group-item><p class="billField">Quantity:<span class="spanText">{{quantity}}</span></p>   </b-list-group-item>
+        </b-list-group>
+      </div>
   </div>
 </template>
 
@@ -18,6 +24,32 @@
 
 export default {
   components: {
-  }
+  },
+  data() {
+    return {
+      checked: false
+    }
+  },
+  props: [
+    "user",
+    "price",
+    "quantity",
+    "share",
+  ]
 }
 </script>
+
+<<!-- style>
+.billData {
+  text-align: right;
+}
+.billField{
+  text-align: left;
+}
+.spanText {
+  float:right;
+}
+.checkbox-label {
+  width:100px;
+}
+</style> -->
