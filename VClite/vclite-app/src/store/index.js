@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
   	currSellPrice: 0,
   	orderType: "",
   },
+  plugins: [createPersistedState()],
   mutations: {
   	updateShareList(state, shares) {
   		state.shares = shares;

@@ -34,6 +34,7 @@
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab title="Buy" active>
         <form>
+          <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
           <label>Price:</label>
           <input ref="buyPriceInput" type="number" name="s-price" min=0 id="buypriceId" v-model="buy_price"><br/>
           <label>Qty:</label>
@@ -43,6 +44,7 @@
       </b-tab>
       <b-tab title="Sell">
         <form>
+          <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
           <label>Price:</label>
           <input ref="sellPriceInput" type="number" name="s-price" min=0 id="sellpriceId" v-model="sell_price"><br/>
           <label>Qty:</label>
@@ -58,6 +60,8 @@
 // @ is an alias to /src
 import OrderSummary from '@/components/OrderSummary.vue'
 import { bus } from '../main'
+import axios from 'axios'
+
 export default {
   data() {
     return {
@@ -69,13 +73,13 @@ export default {
       modalShow: false,
       status: 'not_accepted',
       tabIndex: 0,
+      isLoaded: false,
     }
   },
   components: {
     OrderSummary,
   },
   created() {
-    this.$store.dispatch('getShares'),
     this.$store.commit("resetPrice")
   },
   methods: {
@@ -92,7 +96,6 @@ export default {
     },
     placeBuyOrder() {
       this.buyOrderQty = this.$refs['buyQtyInput'].value;
-      // console.log(this.orderQty);
       this.$refs['buy-modal'].show();
       var orderPrice = document.getElementById('buypriceId').value;
       this.$store.commit("updateCurrBuyPrice", orderPrice);
@@ -106,22 +109,25 @@ export default {
     },
     BuyOrderConfirm() {
       this.$refs['buy-modal'].hide();
-      alert("Buy Order Placed");
+      this.$bvToast.toast(`Bought @ Rs.${this.$store.state.currBuyPrice} per share`, {
+          title: 'Buy Order Placed',
+          variant: 'success',
+          autoHideDelay: 3000,
+        })
     },
     SellOrderConfirm() {
       this.$refs['sell-modal'].hide();
-      alert("Sell Order Placed");
+      this.$bvToast.toast(`Sold @ Rs.${this.$store.state.currSellPrice} per share`, {
+          title: 'Sell Order Placed',
+          variant: 'danger',
+          autoHideDelay: 3000,
+        })
     },
   },
   computed: {
-    buy_price: {
-      get: function() {
+    buy_price: function(){
       return this.$store.state.currBuyPrice;
     },
-      set: function(newValue) {
-        this.buyOrderPrice = newValue;
-    }
-  },
     sell_price: function() {
       return this.$store.state.currSellPrice;
     },
@@ -131,7 +137,6 @@ export default {
       this.tabIndex = data;
     })
   }
-
 }
 </script>
 
@@ -142,7 +147,6 @@ export default {
     padding: 10px;
     border-radius: 25px;
   }
-
   .placer {
     margin-top: 10px;
   }
@@ -162,15 +166,15 @@ export default {
   }
   .billField{
   text-align: left;
-}
+  }
 .billData {
   text-align: right;
-}
+  }
 .spanText {
   float:right;
-}
+  }
 .checkbox-1{
   float: left;
-}
+  }
 
 </style>
