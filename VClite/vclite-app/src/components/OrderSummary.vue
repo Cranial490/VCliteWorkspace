@@ -15,6 +15,9 @@
           <b-list-group-item><p class="billField">Price:<span class="spanText">{{price}}</span></p>      </b-list-group-item>
           <b-list-group-item><p class="billField">Quantity:<span class="spanText">{{quantity}}</span></p>   </b-list-group-item>
         </b-list-group>
+        <h4 v-if="checked == false">Rs.{{ price*quantity }} + {{ brokerage*100 }}%</h4>
+        <h4 v-if="checked == true">Rs.{{ price*quantity }} + {{ iciciBrokerage*100 }}%</h4>
+        <h3>Rs.{{ totalAmountCalc() }}</h3>
       </div>
   </div>
 </template>
@@ -27,7 +30,11 @@ export default {
   },
   data() {
     return {
-      checked: false
+      checked: false,
+      brokerage: .015,
+      iciciBrokerage: .02,
+      totalAmount: 0,
+      brokerageCalc: 0,
     }
   },
   props: [
@@ -35,7 +42,19 @@ export default {
     "price",
     "quantity",
     "share",
-  ]
+  ],
+  methods: {
+    totalAmountCalc: function() {
+      if(this.checked) {
+        this.brokerageCalc = this.price * this.quantity * this.iciciBrokerage;
+      }
+      else {
+        this.brokerageCalc = this.price * this.quantity * this.brokerage;
+      }
+      this.totalAmount = this.price * this.quantity + this.brokerageCalc;
+      return this.totalAmount;
+    }
+  }
 }
 </script>
 
