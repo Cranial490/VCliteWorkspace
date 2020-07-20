@@ -25,23 +25,6 @@
                 &copy; VC<sup>lite</sup> All Rights Reserved.
             </small>
         </div>
-        <div class="level-item">
-                <span class="icon">
-                  <i class="fab fa-twitter"></i>
-                </span> &emsp;
-                <span class="icon">
-                  <i class="fab fa-facebook"></i>
-                </span> &emsp;
-                <span class="icon">
-                  <i class="fab fa-instagram"></i>
-                </span> &emsp;
-                <span class="icon">
-                  <i class="fab fa-github"></i>
-                </span> &emsp;
-                <span class="icon">
-                  <i class="fas fa-envelope"></i>
-                </span>
-              </div>
     </b-container>
 </template>
 
