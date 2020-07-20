@@ -17,6 +17,7 @@ Vue.use(Vuex)
 Vue.config.productionTip = false
 Vue.use(BootstrapVue);
 Vue.use(Carousel3d);
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

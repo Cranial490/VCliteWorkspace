@@ -1,5 +1,5 @@
 <template>
-	<div class="sidenav">
+	<div class="sidenav" v-if="isSideVisible">
     <div class="orders">
       <OrderWindow v-if="$route.params.shareid"></OrderWindow>
       <hr>
@@ -15,6 +15,16 @@ import OrderWindow from '@/components/OrderWindow.vue'
 export default {
   components: {
     OrderWindow,
+  },
+  computed: {
+    isSideVisible: function() {
+      if(this.$route.name === "Login") {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
   }
 }
 </script>
