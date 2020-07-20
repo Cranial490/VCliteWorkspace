@@ -10,11 +10,13 @@ import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Carousel3d from 'vue-carousel-3d';
 
 Vue.use(Vuex)
 
 Vue.config.productionTip = false
 Vue.use(BootstrapVue);
+Vue.use(Carousel3d);
 
 /* eslint-disable no-new */
 new Vue({
