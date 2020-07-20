@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav" v-if="isNavVisible">
       <top-header></top-header>
     </div>
     <div id="sidebar">
@@ -18,6 +18,16 @@ export default {
   components: {
     "top-header": NavBar,
     "side-bar": SideBar
+  },
+  computed: {
+    isNavVisible: function() {
+      if(this.$route.name === "Login") {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
   }
 }
 </script>
