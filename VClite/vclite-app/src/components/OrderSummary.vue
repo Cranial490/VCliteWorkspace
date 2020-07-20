@@ -57,18 +57,3 @@ export default {
   }
 }
 </script>
-
-<<!-- style>
-.billData {
-  text-align: right;
-}
-.billField{
-  text-align: left;
-}
-.spanText {
-  float:right;
-}
-.checkbox-label {
-  width:100px;
-}
-</style> -->
