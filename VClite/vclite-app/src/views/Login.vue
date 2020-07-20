@@ -1,6 +1,6 @@
 <template>
-    <b-container>
-    <div class="content">
+    <b-container class="loginBox">
+    <div class="content loginContent">
         <h2>Login</h2>
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
@@ -20,7 +20,7 @@
             </div>
         </form>
     </div>
-</b-container>
+    </b-container>
 </template>
 
 
@@ -41,6 +41,7 @@ export default {
     created () {
         // reset login status
         this.logout();
+        console.log(this.$route.name);
     },
     methods: {
         ...mapActions('account', ['login', 'logout']),
@@ -58,6 +59,18 @@ export default {
 <style>
 .content {
   width:75%;
-    float:right;
+  float:right;
+}
+.loginContent {
+  border:1px solid;
+  border-color: #8c8f946b;
+  border-radius:10px;
+  padding:30px;
+  /*width:50%;*/
+}
+.loginBox {
+    width:50%;
+    padding:30px;
+    padding-top:50px;
 }
 </style>
