@@ -1,7 +1,7 @@
 <template>
     <b-container class="loginBox">
         <h2>Login</h2>
-    <div class="loginContent">
+    <div class="loginContent shadow">
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
                 <label for="username">Username</label>
@@ -20,6 +20,28 @@
             </div>
         </form>
     </div>
+        <div class="bottomMark">
+            <small style="color: hsla(0, 0%, 0%, 0.33);">
+                &copy; VC<sup>lite</sup> All Rights Reserved.
+            </small>
+        </div>
+        <div class="level-item">
+                <span class="icon">
+                  <i class="fab fa-twitter"></i>
+                </span> &emsp;
+                <span class="icon">
+                  <i class="fab fa-facebook"></i>
+                </span> &emsp;
+                <span class="icon">
+                  <i class="fab fa-instagram"></i>
+                </span> &emsp;
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span> &emsp;
+                <span class="icon">
+                  <i class="fas fa-envelope"></i>
+                </span>
+              </div>
     </b-container>
 </template>
 
@@ -62,6 +84,8 @@ export default {
   border-color: #8c8f946b;
   border-radius:10px;
   padding:30px;
+  background-color: #ffff;
+
   /*width:50%;*/
 }
 .loginBox {
