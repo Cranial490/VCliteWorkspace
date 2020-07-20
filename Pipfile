@@ -7,8 +7,10 @@ verify_ssl = true
 
 [packages]
 django = "*"
-djangorestframework = "*"
+djangorestframework-jwt = "*"
+django-rest-passwordreset = "*"
 django-cors-headers = "*"
+djangorestframework = "*"
 
 [requires]
 python_version = "3.8"

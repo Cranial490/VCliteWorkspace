@@ -11,6 +11,7 @@ import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'w3-css/w3.css';
+import Carousel3d from 'vue-carousel-3d';
 
 Vue.use(Vuex)
 
@@ -19,6 +20,9 @@ Vue.use(BootstrapVue);
 
 //Event bus for component communication 
 export const bus = new Vue();
+
+Vue.use(Carousel3d);
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
