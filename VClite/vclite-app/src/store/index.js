@@ -3,6 +3,9 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import createPersistedState from "vuex-persistedstate";
 
+import { alert } from './alert.module'
+import { account } from './account.module'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -39,5 +42,7 @@ export default new Vuex.Store({
   	}
   },
   modules: {
+    alert,
+    account
   }
 })
