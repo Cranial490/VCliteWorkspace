@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <b-container>
+    <div class="content">
         <h2>Login</h2>
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
@@ -19,6 +20,7 @@
             </div>
         </form>
     </div>
+</b-container>
 </template>
 
 
@@ -52,3 +54,10 @@ export default {
     }
 };
 </script>
+
+<style>
+.content {
+  width:75%;
+    float:right;
+}
+</style>
