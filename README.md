@@ -4,6 +4,7 @@ Off market exchange
 To get started
 - clone repo
 - pipenv install (To install dependencies from pipfile)
+- pipenv shell (start virtual environment)
 - python manage.py runserver 
 - To startup front-end 'cd' to vc-app
 - npm install (To install dependencies from package.json)
