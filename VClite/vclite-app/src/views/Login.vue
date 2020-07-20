@@ -1,7 +1,7 @@
 <template>
     <b-container class="loginBox">
-    <div class="content loginContent">
         <h2>Login</h2>
+    <div class="loginContent">
         <form @submit.prevent="handleSubmit">
             <div class="form-group">
                 <label for="username">Username</label>
@@ -57,10 +57,6 @@ export default {
 </script>
 
 <style>
-.content {
-  width:75%;
-  float:right;
-}
 .loginContent {
   border:1px solid;
   border-color: #8c8f946b;
@@ -69,7 +65,8 @@ export default {
   /*width:50%;*/
 }
 .loginBox {
-    width:50%;
+    width:35%;
+    height:50%;
     padding:30px;
     padding-top:50px;
 }
