@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import createPersistedState from "vuex-persistedstate";
 
 import { alert } from './alert.module'
 import { account } from './account.module'
@@ -13,8 +14,8 @@ export default new Vuex.Store({
   	currBuyPrice: 0,
   	currSellPrice: 0,
   	orderType: "",
-  	tabIndex: 0,
   },
+  plugins: [createPersistedState()],
   mutations: {
   	updateShareList(state, shares) {
   		state.shares = shares;
@@ -28,9 +29,6 @@ export default new Vuex.Store({
   	resetPrice(state) {
   		state.currBuyPrice = 0;
   		state.currSellPrice = 0;
-  	},
-  	updateTransactionTypeIndex(state, index) {
-  		state.tabIndex = index;
   	}
   },
   actions: {

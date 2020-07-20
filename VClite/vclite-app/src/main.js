@@ -18,6 +18,9 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue);
 Vue.use(Carousel3d);
 
+//Event bus for component communication 
+export const bus = new Vue();
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

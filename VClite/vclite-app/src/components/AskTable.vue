@@ -20,15 +20,15 @@
 
 <script>
 // @ is an alias to /src
-
+import { bus } from '../main'
 export default {
   props: [
     "asks"
   ],
   methods: {
   fetchAskPrice(price) {
-     this.$store.commit("updateTransactionTypeIndex", 1);
      this.$store.commit("updateCurrSellPrice", price);
+     bus.$emit('updateTabIndex', 1);
     }
   }
 }

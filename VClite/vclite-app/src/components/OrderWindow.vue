@@ -1,24 +1,54 @@
 <template>
   <b-container class="orderWindow">
-  	<div>
-      <b-tabs :value="tabIndex" content-class="mt-3" fill>
+    <div>
+      <!-- <TEST MODAL> -->
+      <div>
+       <b-modal ref="buy-modal" hide-footer title="BUY Order Summary">
+          <div class="d-block text-center">
+            <h3>Invoice</h3>
+            <OrderSummary 
+            :user="'None'"
+            :price="$store.state.currBuyPrice"
+            :quantity="buyOrderQty"
+            :share="filterShare()[0]"
+            ></OrderSummary>
+          </div>
+          <b-button class="mt-3" variant="outline-info" block @click="BuyOrderConfirm()">Confirm Order</b-button>
+        </b-modal>
+      </div>
+      <div>
+       <b-modal ref="sell-modal" hide-footer title="SELL Order Summary">
+          <div class="d-block text-center">
+            <h3>Invoice</h3>
+            <OrderSummary 
+            :user="'None'"
+            :price="$store.state.currSellPrice"
+            :quantity="sellOrderQty"
+            :share="filterShare()[0]"
+            ></OrderSummary>
+          </div>
+          <b-button class="mt-3" variant="outline-info" block @click="SellOrderConfirm()">Confirm Order</b-button>
+        </b-modal>
+      </div>
+      <!-- <MODAL TEST> -->
+      <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab title="Buy" active>
         <form>
-          <h4>{{  }}</h4>
+          <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
           <label>Price:</label>
-          <input type="number" name="last" min=0 id="buypriceId" v-model="buy_price"><br/>
+          <input ref="buyPriceInput" type="number" name="s-price" min=0 id="buypriceId" v-model="buy_price"><br/>
           <label>Qty:</label>
-          <input type="number" name="email" min=1><br/>
+          <input ref="buyQtyInput" type="number" name="s-qty" min=1><br/>
           <b-button class="placer" block variant="success" size="lg" @click="placeBuyOrder()">BUY</b-button>
         </form>
       </b-tab>
       <b-tab title="Sell">
         <form>
-          <h4>{{  }}</h4>
+          <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
           <label>Price:</label>
-          <input type="number" name="last" min=0 id="sellpriceId" v-model="sell_price"><br/>
+          <input ref="sellPriceInput" type="number" name="s-price" min=0 id="sellpriceId" v-model="sell_price"><br/>
           <label>Qty:</label>
-          <input type="number" name="email" min=1><br/>
+          <input ref="sellQtyInput" type="number" name="s-qty" min=1><br/>
           <b-button class="placer" block variant="danger" size="lg" @click="placeSellOrder()">SELL</b-button>
         </form>
       </b-tab>
@@ -28,22 +58,29 @@
 </template>
 <script>
 // @ is an alias to /src
+import OrderSummary from '@/components/OrderSummary.vue'
+import { bus } from '../main'
+import axios from 'axios'
 
 export default {
   data() {
     return {
       share_id: this.$route.params.shareid,
-      orderQty: 0,
+      buyOrderQty: 0,
+      sellOrderQty: 0,
       buyOrderPrice: this.$store.state.currBuyPrice,
       sellOrderPrice: 0,
+      modalShow: false,
+      status: 'not_accepted',
+      tabIndex: 0,
+      isLoaded: false,
     }
   },
   components: {
+    OrderSummary,
   },
   created() {
-    this.$store.dispatch('getShares'),
-    this.$store.commit("resetPrice"),
-    this.$store.commit("updateTransactionTypeIndex", 0)
+    this.$store.commit("resetPrice")
   },
   methods: {
     filterShare() {
@@ -58,41 +95,48 @@ export default {
       return this.$store.state.currSellPrice;
     },
     placeBuyOrder() {
-        var orderPrice = document.getElementById('buypriceId').value;
-        alert(orderPrice);
-        this.$store.commit("updateCurrBuyPrice", orderPrice);
-        this.$bvToast.toast("Order Placed", {
-          title: 'BUY',
-          autoHideDelay: 3000,
-        })
-      },
+      this.buyOrderQty = this.$refs['buyQtyInput'].value;
+      this.$refs['buy-modal'].show();
+      var orderPrice = document.getElementById('buypriceId').value;
+      this.$store.commit("updateCurrBuyPrice", orderPrice);
+
+    },
     placeSellOrder() {
-        var orderPrice = document.getElementById('sellpriceId').value;
-        alert(orderPrice);
-        this.$store.commit("updateCurrSellPrice", orderPrice);
-        this.$bvToast.toast("Order Placed", {
-          title: 'SELL',
+      this.sellOrderQty = this.$refs['sellQtyInput'].value;
+      this.$refs['sell-modal'].show()
+      var orderPrice = document.getElementById('sellpriceId').value;
+      this.$store.commit("updateCurrSellPrice", orderPrice);
+    },
+    BuyOrderConfirm() {
+      this.$refs['buy-modal'].hide();
+      this.$bvToast.toast(`Bought @ Rs.${this.$store.state.currBuyPrice} per share`, {
+          title: 'Buy Order Placed',
+          variant: 'success',
           autoHideDelay: 3000,
         })
-      }
+    },
+    SellOrderConfirm() {
+      this.$refs['sell-modal'].hide();
+      this.$bvToast.toast(`Sold @ Rs.${this.$store.state.currSellPrice} per share`, {
+          title: 'Sell Order Placed',
+          variant: 'danger',
+          autoHideDelay: 3000,
+        })
+    },
   },
   computed: {
-    buy_price: {
-      get: function() {
+    buy_price: function(){
       return this.$store.state.currBuyPrice;
     },
-      set: function(newValue) {
-        this.buyOrderPrice = newValue;
-      }
-
-  },
     sell_price: function() {
       return this.$store.state.currSellPrice;
     },
-    tabIndex: function() {
-      return this.$store.state.tabIndex;
-    }
   },
+  mounted () {
+    bus.$on('updateTabIndex', (data) => {
+      this.tabIndex = data;
+    })
+  }
 }
 </script>
 
@@ -103,7 +147,6 @@ export default {
     padding: 10px;
     border-radius: 25px;
   }
-
   .placer {
     margin-top: 10px;
   }
@@ -112,6 +155,26 @@ export default {
     display: inline-block;
     width:100px;
     text-align: left;
-    margin-right: 5px;
-}
+    margin-right: 0px;
+  }
+  .place-order {
+    width: 50%;
+    margin: 0 auto;
+  }
+  .closeBtn {
+    width:10%;
+  }
+  .billField{
+  text-align: left;
+  }
+.billData {
+  text-align: right;
+  }
+.spanText {
+  float:right;
+  }
+.checkbox-1{
+  float: left;
+  }
+
 </style>
