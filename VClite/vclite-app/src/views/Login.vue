@@ -67,7 +67,7 @@ export default {
   border-radius:10px;
   padding:30px;
   background-color: #ffff;
-
+  margin-top: 100px;
   /*width:50%;*/
 }
 .loginBox {
