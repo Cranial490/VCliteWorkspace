@@ -176,5 +176,4 @@ export default {
 .checkbox-1{
   float: left;
   }
-
 </style>

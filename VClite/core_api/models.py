@@ -7,6 +7,8 @@ from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
     dpid = models.CharField(max_length=16)
+    dp_name = models.CharField(max_length=50)
+    pan = models.CharField(max_length=10)
 
 
 class Share(models.Model):
@@ -14,6 +16,7 @@ class Share(models.Model):
     s_description = models.CharField(max_length=150)
     ltp = models.FloatField()
     quantity = models.IntegerField()
+    isin_no = models.CharField(max_length=12)
 
     def __str__(self):
         return self.share_name
@@ -46,27 +49,15 @@ class Ask(models.Model):
 
 
 class Order(models.Model):
-    class OrderStatus(models.TextChoices):
-        SUBMITTED = 'SUBMITTED'
-        PROCESSING = 'PROCESSING'
-        FAILED = 'FAILED'
-        COMPLETE = 'COMPLETE'
-        CANCELLED = 'CANCELLED'
-
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     share = models.ForeignKey(Share, on_delete=models.CASCADE)
     price = models.FloatField()
     quantity = models.IntegerField()
-    # create orde status enums - PROCESSING, COMPLETE, FAILED ....
+    totalAmount = models.FloatField()
+    brokerage = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    order_status = models.CharField(
-        max_length=10,
-        choices=OrderStatus.choices,
-        default=OrderStatus.SUBMITTED
-    )
 
     def __str__(self):
         return self.share.share_name + '@' + str(self.price) + '-' + str(self.quantity)

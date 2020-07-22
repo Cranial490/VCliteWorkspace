@@ -5,7 +5,7 @@ export const userService = {
     login,
     logout,
     //register,
-    getAll,
+    getAllUsers,
     //getById,
     //update
 };
@@ -29,7 +29,7 @@ function login(username, password) {
         });
 }
 
-function getAll() {
+function getAllUsers() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -58,7 +58,7 @@ function handleResponse(response) {
             const error = (data && data.message) || response.statusText;
             return Promise.reject(error);
         }
-
+        console.log(data);
         return data;
     });
 }

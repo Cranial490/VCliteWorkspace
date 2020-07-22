@@ -16,7 +16,7 @@
             <b-card-text>{{ slide.s_description }}</b-card-text>
             <b-button @click="getDetails()" variant="primary">Details</b-button>
             <template v-slot:footer>
-              <small class="text" :style="{'font-size': 'larger', 'font-weight':'bold'}">LTP: Rs.{{ slide.ltp }}</small>
+              <small class="text" :style="{'font-size': 'medium', 'font-weight':'bold'}">LTP: Rs.{{ slide.ltp }}</small>
             </template>
           </b-card>
         </b-card-group>
@@ -32,7 +32,7 @@ import { Carousel3d, Slide } from 'vue-carousel-3d';
 export default {
  data() {
     return {
-      slides: $store.state.shares.length,
+      
     }
   },
   components: {

@@ -15,8 +15,8 @@
           <b-list-group-item><p class="billField">Price:<span class="spanText">{{price}}</span></p>      </b-list-group-item>
           <b-list-group-item><p class="billField">Quantity:<span class="spanText">{{quantity}}</span></p>   </b-list-group-item>
         </b-list-group>
-        <h4 v-if="checked == false">Rs.{{ price*quantity }} + {{ brokerage*100 }}%</h4>
-        <h4 v-if="checked == true">Rs.{{ price*quantity }} + {{ iciciBrokerage*100 }}%</h4>
+        <h5 v-if="checked == false" id="calDetail">Rs.{{ price*quantity }} + {{ brokerage*100 }}%</h5>
+        <h5 v-if="checked == true" id="calDetail">Rs.{{ price*quantity }} + {{ iciciBrokerage*100 }}%</h5>
         <h3>Rs.{{ totalAmountCalc() }}</h3>
       </div>
   </div>
