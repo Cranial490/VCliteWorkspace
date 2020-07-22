@@ -17,6 +17,7 @@ import axios from 'axios';
 import AskTable from '@/components/AskTable.vue'
 import BidTable from '@/components/BidTable.vue'
 import OrderWindow from '@/components/OrderWindow.vue'
+import { authHeader } from '../_helpers/auth-header'
 export default {
   data() {
   	return {
@@ -32,12 +33,12 @@ export default {
   },
   methods: {
   	getAsks(){
-  	axios.get("http://127.0.0.1:8000/apiv0/asks/", {params: {share_id: this.share_id}})
+  	axios.get("http://127.0.0.1:8000/apiv0/asks/", {params: {share_id: this.share_id}, headers: authHeader() } )
       .then(res => (this.asks = res.data))
       .catch(err => console.log(err));
   	},
   	getBids(){
-  	axios.get("http://127.0.0.1:8000/apiv0/bids/", {params: {share_id: this.share_id}})
+  	axios.get("http://127.0.0.1:8000/apiv0/bids/", {params: {share_id: this.share_id}, headers:  authHeader() } )
       .then(res => (this.bids = res.data))  
       .catch(err => console.log(err));
   	}

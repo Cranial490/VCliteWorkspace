@@ -33,27 +33,23 @@
       <!-- <MODAL TEST> -->
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab title="Buy" active>
-        <form @submit.prevent="placeBuyOrder">  <!--@submit.prevent="placeBuyOrder"-->
+        <form>
           <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
           <label>Price:</label>
-          <input ref="buyPriceInput" type="number" name="s-price" min=0 id="buypriceId" v-model="buy_price" :class="{ 'is-invalid': submitted && buyOrderPrice == 0 }"><br/>
-          <div v-show="submitted && buyOrderPrice == 0" class="invalid-feedback">Invalid Price</div>
+          <input ref="buyPriceInput" type="number" name="s-price" min=0 id="buypriceId" v-model="buy_price"><br/>
           <label>Qty:</label>
-          <input ref="buyQtyInput" type="number" name="s-qty" min=1 :class="{ 'is-invalid': submitted && buyOrderQty == 0 }"><br/>
-          <div v-show="submitted && buyOrderQty == 0" class="invalid-feedback">Invalid Quantity</div>
-          <b-button class="placer" block variant="success" :disabled="isBuyFilledCorrectly" size="lg" @click="placeBuyOrder()">BUY</b-button>
+          <input ref="buyQtyInput" type="number" name="s-qty" min=1><br/>
+          <b-button class="placer" block variant="success" size="lg" @click="placeBuyOrder()">BUY</b-button>
         </form>
       </b-tab>
       <b-tab title="Sell">
-        <form @submit.prevent="placeSellOrder"> <!-- @submit.prevent="placeSellOrder"-->
+        <form>
           <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
           <label>Price:</label>
-          <input ref="sellPriceInput" type="number" name="s-price" min=0 id="sellpriceId" v-model="sell_price" :class="{ 'is-invalid': submitted && sell_price == 0}"><br/>
-          <div v-show="submitted && sell_price == 0" class="invalid-feedback">Invalid Price</div>
+          <input ref="sellPriceInput" type="number" name="s-price" min=0 id="sellpriceId" v-model="sell_price"><br/>
           <label>Qty:</label>
-          <input ref="sellQtyInput" type="number" name="s-qty" min=1 :class="{ 'is-invalid': submitted && sellOrderQty == 0 }"><br/>
-          <div v-show="submitted && sellOrderQty == 0" class="invalid-feedback">Invalid Quantity</div>
-          <b-button class="placer" block variant="danger" :disabled="isSellFilledCorrectly" size="lg" @click="placeSellOrder()">SELL</b-button>
+          <input ref="sellQtyInput" type="number" name="s-qty" min=1><br/>
+          <b-button class="placer" block variant="danger" size="lg" @click="placeSellOrder()">SELL</b-button>
         </form>
       </b-tab>
       </b-tabs>
@@ -78,7 +74,6 @@ export default {
       status: 'not_accepted',
       tabIndex: 0,
       isLoaded: false,
-      submitted: false,
     }
   },
   components: {
@@ -100,7 +95,6 @@ export default {
       return this.$store.state.currSellPrice;
     },
     placeBuyOrder() {
-      this.submitted = true
       this.buyOrderQty = this.$refs['buyQtyInput'].value;
       this.$refs['buy-modal'].show();
       var orderPrice = document.getElementById('buypriceId').value;
@@ -108,7 +102,6 @@ export default {
 
     },
     placeSellOrder() {
-      this.submitted = true
       this.sellOrderQty = this.$refs['sellQtyInput'].value;
       this.$refs['sell-modal'].show()
       var orderPrice = document.getElementById('sellpriceId').value;
@@ -137,12 +130,6 @@ export default {
     },
     sell_price: function() {
       return this.$store.state.currSellPrice;
-    },
-    isBuyFilledCorrectly: function() {
-      return this.buyOrderPrice>0 && this.buyOrderQty>0
-    },
-    isSellFilledCorrectly: function() {
-      return this.sellOrderPrice>0 && this.sellOrderQty>0
     },
   },
   mounted () {

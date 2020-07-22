@@ -26,7 +26,7 @@ class ShareViewSet(viewsets.ModelViewSet):
 class AskViewSet(viewsets.ModelViewSet):
     queryset = Ask.objects.all()
     serializer_class = AskSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         id = self.request.query_params.get('share_id')
@@ -41,7 +41,7 @@ class AskViewSet(viewsets.ModelViewSet):
 class BidViewSet(viewsets.ModelViewSet):
     queryset = Bid.objects.all()
     serializer_class = BidSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         id = self.request.query_params.get('share_id')

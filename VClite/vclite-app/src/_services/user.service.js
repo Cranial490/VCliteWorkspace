@@ -5,7 +5,7 @@ export const userService = {
     login,
     logout,
     //register,
-    getAll,
+    getAllUsers,
     //getById,
     //update
 };
@@ -19,6 +19,7 @@ function login(username, password) {
     return fetch('http://127.0.0.1:8000/auth/obtain_token/', requestOptions)
         .then(handleResponse)
         .then(user => {
+            console.log("after handling respose user = ", user)
             // login successful if there's a jwt token in the response
             if (user.token) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -29,12 +30,11 @@ function login(username, password) {
         });
 }
 
-function getAll() {
+function getAllUsers() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
-
     return fetch('http://127.0.0.1:8000/apiv0/user/', requestOptions).then(handleResponse);
 }
 
