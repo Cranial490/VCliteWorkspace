@@ -33,34 +33,44 @@
       <!-- <MODAL TEST> -->
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab title="Buy" active>
-        <form>
+        <form>  <!--@submit.prevent="placeBuyOrder"-->
           <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
           <label>Price:</label>
           <input ref="buyPriceInput" type="number" name="s-price" min=0 id="buypriceId" v-model="buy_price"><br/>
           <label>Qty:</label>
-          <input ref="buyQtyInput" type="number" name="s-qty" min=1><br/>
+          <input ref="buyQtyInput" type="number" name="s-qty" min=1 ><br/>
           <b-button class="placer" block variant="success" size="lg" @click="placeBuyOrder()">BUY</b-button>
         </form>
       </b-tab>
       <b-tab title="Sell">
-        <form>
+        <form @submit.prevent="placeSellOrder"> <!-- @submit.prevent="placeSellOrder"-->
           <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
-          <label>Price:</label>
-          <input ref="sellPriceInput" type="number" name="s-price" min=0 id="sellpriceId" v-model="sell_price"><br/>
-          <label>Qty:</label>
-          <input ref="sellQtyInput" type="number" name="s-qty" min=1><br/>
-          <b-button class="placer" block variant="danger" size="lg" @click="placeSellOrder()">SELL</b-button>
+          <div class="form-group">
+            <label>Price:</label>
+            <input ref="sellPriceInput" type="number" name="s-price" min=0 id="sellpriceId" v-model="sell_price" ><br/>
+            <div v-show="submitted && !sellOrderPrice" class="invalid-feedback">Invalid Price</div>
+          </div>
+          <div class="form-group">
+            <label>Qty:</label>
+            <input ref="sellQtyInput" type="number" name="s-qty" min=1 :class="{ 'is-invalid': submitted && !this.sellOrderQty}"><br/>
+            <div v-show="submitted && !sellOrderQty" class="invalid-feedback">Invalid Quantity</div>
+          </div>
+          <div class="form-group">
+            <b-button class="placer" block variant="danger" size="lg" @click="placeSellOrder()" :disabled="!validation_status.sellOrderValidated">SELL</b-button>
+          </div>
         </form>
       </b-tab>
       </b-tabs>
     </div>
   </b-container>
 </template>
+<!--@click="placeSellOrder()"-->
 <script>
 // @ is an alias to /src
 import OrderSummary from '@/components/OrderSummary.vue'
 import { bus } from '../main'
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
   data() {
@@ -74,6 +84,7 @@ export default {
       status: 'not_accepted',
       tabIndex: 0,
       isLoaded: false,
+      submitted: false,
     }
   },
   components: {
@@ -95,6 +106,7 @@ export default {
       return this.$store.state.currSellPrice;
     },
     placeBuyOrder() {
+      this.submitted = true
       this.buyOrderQty = this.$refs['buyQtyInput'].value;
       this.$refs['buy-modal'].show();
       var orderPrice = document.getElementById('buypriceId').value;
@@ -102,10 +114,18 @@ export default {
 
     },
     placeSellOrder() {
+      this.submitted = true
       this.sellOrderQty = this.$refs['sellQtyInput'].value;
       this.$refs['sell-modal'].show()
+      var sellQty = this.sellOrderQty
       var orderPrice = document.getElementById('sellpriceId').value;
-      this.$store.commit("updateCurrSellPrice", orderPrice);
+      console.log("1 orderPrice = ", orderPrice)
+      console.log("1 orderQty = ", this.sellOrderQty)
+      //const {sellOrderPrice, sellOrderQty} = this;
+      console.log("2 orderPrice = ", orderPrice)
+      console.log("2 orderQty = ", this.sellOrderQty) //6
+      this.$store.dispatch("CurrSellPriceRequest", {orderPrice, sellQty})
+      //this.$store.commit("updateCurrSellPrice", orderPrice);
     },
     BuyOrderConfirm() {
       this.$refs['buy-modal'].hide();
@@ -125,6 +145,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(['validation_status', 'currBuyPrice', 'currSellPrice']),
     buy_price: function(){
       return this.$store.state.currBuyPrice;
     },
