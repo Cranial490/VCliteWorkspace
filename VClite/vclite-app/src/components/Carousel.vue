@@ -12,8 +12,8 @@
             header="Featured"
             header-tag="header"
             >
-            <b-card-title>{{ slide.share_name }}</b-card-title>
-            <b-card-text>{{ slide.s_description }}</b-card-text>
+            <b-card-title>{{ slide.name }}</b-card-title>
+            <b-card-text>{{ slide.description }}</b-card-text>
             <b-button @click="getDetails()" variant="primary">Details</b-button>
             <template v-slot:footer>
               <small class="text" :style="{'font-size': 'larger', 'font-weight':'bold'}">LTP: Rs.{{ slide.ltp }}</small>
@@ -32,7 +32,7 @@ import { Carousel3d, Slide } from 'vue-carousel-3d';
 export default {
  data() {
     return {
-      slides: $store.state.shares.length,
+      
     }
   },
   components: {

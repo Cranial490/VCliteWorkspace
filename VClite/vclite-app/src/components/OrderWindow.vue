@@ -34,7 +34,7 @@
       <b-tabs v-model="tabIndex" content-class="mt-3" fill>
         <b-tab title="Buy" active>
         <form>
-          <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
+          <h3 v-if="filterShare().length > 0">{{ filterShare()[0].name }}</h3>
           <label>Price:</label>
           <input ref="buyPriceInput" type="number" name="s-price" min=0 id="buypriceId" v-model="buy_price"><br/>
           <label>Qty:</label>
@@ -44,7 +44,7 @@
       </b-tab>
       <b-tab title="Sell">
         <form>
-          <h3 v-if="filterShare().length > 0">{{ filterShare()[0].share_name }}</h3>
+          <h3 v-if="filterShare().length > 0">{{ filterShare()[0].name }}</h3>
           <label>Price:</label>
           <input ref="sellPriceInput" type="number" name="s-price" min=0 id="sellpriceId" v-model="sell_price"><br/>
           <label>Qty:</label>

@@ -5,24 +5,28 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
 
-class CustomUser(AbstractUser):
+class VC_T_User(AbstractUser):
     dpid = models.CharField(max_length=16)
+    phone_no = models.CharField(max_length=10)
+    pan_no = models.CharField(max_length=10)
 
 
-class Share(models.Model):
-    share_name = models.CharField(max_length=50)
-    s_description = models.CharField(max_length=150)
+class VC_T_Share(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=150)
     ltp = models.FloatField()
     quantity = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.share_name
+        return self.name
 
 
-class Bid(models.Model):
+class VC_T_Bid(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    share = models.ForeignKey(Share, on_delete=models.CASCADE)
+    share = models.ForeignKey(VC_T_Share, on_delete=models.CASCADE)
     bid_price = models.FloatField()
     quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -32,10 +36,10 @@ class Bid(models.Model):
         return self.share.share_name + '@' + str(self.bid_price)
 
 
-class Ask(models.Model):
+class VC_T_Ask(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    share = models.ForeignKey(Share, on_delete=models.CASCADE)
+    share = models.ForeignKey(VC_T_Share, on_delete=models.CASCADE)
     ask_price = models.FloatField()
     quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -45,7 +49,7 @@ class Ask(models.Model):
         return self.share.share_name + '@' + str(self.ask_price)
 
 
-class Order(models.Model):
+class VC_T_Order(models.Model):
     class OrderStatus(models.TextChoices):
         SUBMITTED = 'SUBMITTED'
         PROCESSING = 'PROCESSING'
@@ -53,29 +57,57 @@ class Order(models.Model):
         COMPLETE = 'COMPLETE'
         CANCELLED = 'CANCELLED'
 
+    class OrderType(models.TextChoices):
+        BUY = 'BUY'
+        SELL = 'SELL'
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    share = models.ForeignKey(Share, on_delete=models.CASCADE)
+    share = models.ForeignKey(VC_T_Share, on_delete=models.CASCADE)
     price = models.FloatField()
     quantity = models.IntegerField()
-    # create orde status enums - PROCESSING, COMPLETE, FAILED ....
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
+    updated_quantity = models.IntegerField()
     order_status = models.CharField(
         max_length=10,
         choices=OrderStatus.choices,
         default=OrderStatus.SUBMITTED
     )
+    order_type = models.CharField(
+        max_length=4,
+        choices=OrderType.choices,
+        default=OrderType.BUY
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.share.share_name + '@' + str(self.price) + '-' + str(self.quantity)
 
 
-class OrderQ(models.Model):
+class VC_T_Order_Executed(models.Model):
     class OrderStatus(models.TextChoices):
         SUBMITTED = 'SUBMITTED'
-        PROCESSING = 'PROCESSING'
+        EXECUTED = 'EXECUTED'
+        FAILED = 'FAILED'
+        COMPLETE = 'COMPLETE'
+        CANCELLED = 'CANCELLED'
+
+    parent_order = models.ForeignKey(VC_T_Order, on_delete=models.CASCADE)
+    price = models.FloatField()
+    filled_quantity = models.IntegerField()
+    order_status = models.CharField(
+        max_length=10,
+        choices=OrderStatus.choices,
+        default=OrderStatus.EXECUTED
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class VC_T_Order_Queue(models.Model):
+    class OrderStatus(models.TextChoices):
+        SUBMITTED = 'SUBMITTED'
+        EXECUTED = 'EXECUTED'
         FAILED = 'FAILED'
         COMPLETE = 'COMPLETE'
         CANCELLED = 'CANCELLED'
@@ -84,9 +116,14 @@ class OrderQ(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='buyer2seller')
     seller = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='seller2buyer')
+    parent_order = models.ForeignKey(VC_T_Order, on_delete=models.CASCADE)
+    buyer_order_child = models.ForeignKey(
+        VC_T_Order_Executed, on_delete=models.CASCADE, related_name='buyerOrder')
+    seller_order_child = models.ForeignKey(
+        VC_T_Order_Executed, on_delete=models.CASCADE, related_name='sellerOrder')
     price = models.FloatField()
     quantity = models.IntegerField()
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
     order_status = models.CharField(
         max_length=10,
         choices=OrderStatus.choices,

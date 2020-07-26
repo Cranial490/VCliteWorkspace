@@ -13,6 +13,7 @@ router.register('bids', BidViewSet)
 router.register('order', OrderViewSet)
 router.register('trade', OrderQViewSet)
 router.register('user', UserViewSet)
+router.register('executed', OrderExecutedViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

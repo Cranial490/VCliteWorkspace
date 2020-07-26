@@ -10,7 +10,7 @@
           <b-list-group-item><p class="billField">Username:<span class="spanText">None</span></p>   <p class="billData"></p></b-list-group-item>
           <b-list-group-item><p class="billField">DP Name:<span class="spanText">None</span></p>    </b-list-group-item>
           <b-list-group-item><p class="billField">DPID:<span class="spanText">None</span></p>       </b-list-group-item>
-          <b-list-group-item><p class="billField">Share:<span class="spanText">{{share.share_name}}</span></p></b-list-group-item>
+          <b-list-group-item><p class="billField">Share:<span class="spanText">{{share.name}}</span></p></b-list-group-item>
           <b-list-group-item><p class="billField">ISI Number:<span class="spanText">None</span></p> </b-list-group-item>
           <b-list-group-item><p class="billField">Price:<span class="spanText">{{price}}</span></p>      </b-list-group-item>
           <b-list-group-item><p class="billField">Quantity:<span class="spanText">{{quantity}}</span></p>   </b-list-group-item>
