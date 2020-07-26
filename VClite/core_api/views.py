@@ -72,40 +72,39 @@ class OrderQViewSet(viewsets.ModelViewSet):
 
 
 def getOrderBook(order):
-    if order.parentOrder.order_type == "BUY":
-        orderBook = Ask.objects.filter(
-            share__share_name__contains=order.share.share_name, ask_price=order.bid_price)
+    if order.parent_order.order_type == "BUY":
+        orderBook = VC_T_Ask.objects.filter(
+            share__name__contains=order.share.name, ask_price=order.bid_price)
         return orderBook.order_by('created_at')
-    elif order.parentOrder.order_type == "SELL":
-        orderBook = Bid.objects.filter(
-            share__share_name__contains=order.share.share_name, bid_price=order.ask_price)
+    elif order.parent_order.order_type == "SELL":
+        orderBook = VC_T_Bid.objects.filter(
+            share__name__contains=order.share.name, bid_price=order.ask_price)
         return orderBook.order_by('created_at')
 
 
-def createOrder(data):
-    parentOrder = Order(
-        user=VC_T_User(username=request.user),
-        share=VC_T_Share(name=data['share']),
-        price=request.data['price'],
-        quantity=request.data['quantity'],
-        brokerage=request.data['brokerage'],
+def createOrder(request):
+    parentOrder = VC_T_Order(
+        user=VC_T_User.objects.filter(username=request.data['user'])[0],
+        share=VC_T_Share.objects.filter(name=request.data['share'])[0],
+        price=float(request.data['price']),
+        quantity=int(request.data['quantity']),
         order_type=request.data['order_type'],
-        updatedQuantity=request.data['quantity']
+        updated_quantity=int(request.data['quantity'])
     )
     parentOrder.save()
     if parentOrder.order_type == 'BUY':
-        order = Bid(
+        order = VC_T_Bid(
             user=parentOrder.user,
             share=parentOrder.share,
-            parentOrder=parentOrder,
+            parent_order=parentOrder,
             bid_price=parentOrder.price,
-            quantity=parentOrder.updatedQuantity
+            quantity=parentOrder.updated_quantity
         )
     elif parentOrder.order_type == 'SELL':
-        order = Ask(
+        order = VC_T_Ask(
             user=parentOrder.user,
             share=parentOrder.share,
-            parentOrder=parentOrder,
+            parent_order=parentOrder,
             ask_price=parentOrder.price,
             quantity=parentOrder.updatedQuantity
         )
@@ -114,7 +113,7 @@ def createOrder(data):
 
 
 def dataValid(data):
-    if data['price'] > 0 and data['quantity'] > 0:
+    if int(data['price']) > 0 and int(data['quantity']) > 0:
         return True
     else:
         return False
@@ -142,15 +141,18 @@ def shareExists(name):
 
 
 def validate_data(request):
-    if (request.data['quantity'].is_Integer() and
-        request.data['price'].is_Integer() and
+    print(request.data)
+    if (stringValid(request.data['quantity']) and
+        stringValid(request.data['price']) and
         stringValid(request.data['order_type']) and
         stringValid(request.data['share']) and
-            stringValid(request.user) and dataValid(request.data)):
+            dataValid(request.data)):
 
         if(userExists(request.user) and shareExists(request.data['share'])):
+            print("returning True userExists")
             return True
         else:
+            print("returning True userNotExists")
             return False
     else:
         return False
@@ -161,11 +163,11 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = (AllowAny,)
 
-    @action(methods=['POST'], detail=False, url_path='execute')
+    @ action(methods=['POST'], detail=False, url_path='execute')
     def execute_order(self, request):
         if request.method == 'POST':
             if validate_data(request):
-                parentOrder, order = createOrder(request.data)
+                parentOrder, order = createOrder(request)
                 orderBook = getOrderBook(order)
                 trades = matching_engine(orderBook, order, parentOrder)
                 response = {'message': 'Order placed successfully'}
