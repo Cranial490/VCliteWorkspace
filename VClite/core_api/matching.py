@@ -6,8 +6,9 @@ def matching_engine(orderBook, order, parentOrder):
         # Buy order crossed the spread
         filled = 0
         consumed_asks = []
-        tradebook = []
         for ask in orderBook:
+            # if ask.user == order.user:
+            #     continue
             if ask.ask_price > order.bid_price:
                 break  # Price of ask is too high, stop filling order
             elif filled == order.quantity:
@@ -38,7 +39,7 @@ def matching_engine(orderBook, order, parentOrder):
         # Place any remaining volume in LOB
         if filled < order.quantity:
             # self.orderbook.add(Order("limit", "buy", order.price, order.quantity-filled))
-            order.quantity = order.quantity - filled
+            order.quantity -= filled
             order.save()
 
         # Remove asks used for filling order
@@ -81,10 +82,7 @@ def matching_engine(orderBook, order, parentOrder):
             bid.delete()
 
     else:
-        if orderType == 'buy':
-            createBid(order)
-        elif orderType == 'sell':
-            createAsk(order)
+        order.save()
         # Order did not cross the spread, place in order book
         # self.orderbook.add(order)
 
@@ -105,6 +103,8 @@ def Trade(bid, ask, volume, parentOrder):
                 filled_quantity=volume)
 
             parentOrder.updated_quantity = parentOrder.updated_quantity - volume
+            if(parentOrder.updated_quantity == 0):
+                parentOrder.order_status = "EXECUTED"
             parentOrder.save()
             childBid.save()
             childAsk.save()
@@ -128,14 +128,19 @@ def Trade(bid, ask, volume, parentOrder):
                 price=ask.ask_price,
                 filled_quantity=ask.quantity)
 
-            parentOrder.updated_quantity = parentOrder.updated_quantity - ask.quantity
+            parentOrder.updated_quantity -= ask.quantity
+            if(parentOrder.updated_quantity == 0):
+                parentOrder.order_status = "EXECUTED"
             parentOrder.save()
+            ask.parent_order.updated_quantity -= ask.quantity
+            if(ask.parent_order.updated_quantity == 0):
+                ask.parent_order.order_status = "EXECUTED"
+            ask.parent_order.save()
             childBid.save()
             childAsk.save()
 
             queueEntry = OrderQ(buyer=bid.user,
                                 seller=ask.user,
-                                parentOrder=parentOrder,
                                 buyer_order_child=childBid,
                                 seller_order_child=childAsk,
                                 price=bid.bid_price,

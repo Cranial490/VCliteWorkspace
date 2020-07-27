@@ -55,7 +55,7 @@ class VC_T_Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.share.share_name + '@' + str(self.price) + '-' + str(self.quantity)
+        return self.share.name + '@' + str(self.price) + '-' + str(self.quantity)
 
 
 class VC_T_Bid(models.Model):
@@ -69,7 +69,7 @@ class VC_T_Bid(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.share.share_name + '@' + str(self.bid_price)
+        return self.share.name + '@' + str(self.bid_price)
 
 
 class VC_T_Ask(models.Model):
@@ -83,16 +83,14 @@ class VC_T_Ask(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.share.share_name + '@' + str(self.ask_price)
+        return self.share.name + '@' + str(self.ask_price)
 
 
 class VC_T_Order_Executed(models.Model):
     class OrderStatus(models.TextChoices):
-        SUBMITTED = 'SUBMITTED'
         EXECUTED = 'EXECUTED'
         FAILED = 'FAILED'
         COMPLETE = 'COMPLETE'
-        CANCELLED = 'CANCELLED'
 
     parent_order = models.ForeignKey(VC_T_Order, on_delete=models.CASCADE)
     price = models.FloatField()
