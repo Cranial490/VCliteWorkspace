@@ -106,7 +106,7 @@ def createOrder(request):
             share=parentOrder.share,
             parent_order=parentOrder,
             ask_price=parentOrder.price,
-            quantity=parentOrder.updatedQuantity
+            quantity=parentOrder.updated_quantity
         )
     # order.save()
     return parentOrder, order

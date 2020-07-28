@@ -18,12 +18,12 @@ export default {
         method: 'POST',
         headers: authHeader(),
         data: {
-          price:'1',
-          quantity:'12', 
-          updated_quantity:'12',
+          price:'20',
+          quantity:'3', 
+          updated_quantity:'3',
           user: 'cranial', 
           share:'BBQ',
-          order_type:'BUY'
+          order_type:'SELL'
         }
     };
       axios(axios_request)
