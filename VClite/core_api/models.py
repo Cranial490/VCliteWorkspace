@@ -116,7 +116,6 @@ class VC_T_Order_Queue(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='buyer2seller')
     seller = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='seller2buyer')
-    parent_order = models.ForeignKey(VC_T_Order, on_delete=models.CASCADE)
     buyer_order_child = models.ForeignKey(
         VC_T_Order_Executed, on_delete=models.CASCADE, related_name='buyerOrder')
     seller_order_child = models.ForeignKey(

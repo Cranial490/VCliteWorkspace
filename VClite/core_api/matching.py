@@ -72,7 +72,6 @@ def matching_engine(orderBook, order, parentOrder):
                               volume=volume,
                               parentOrder=parentOrder)
 
-                tradebook.append(trade)
                 bid.quantity -= volume
                 bid.save()
 

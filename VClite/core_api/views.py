@@ -165,6 +165,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @ action(methods=['POST'], detail=False, url_path='execute')
     def execute_order(self, request):
+        print(request.user)
         if request.method == 'POST':
             if validate_data(request):
                 parentOrder, order = createOrder(request)
