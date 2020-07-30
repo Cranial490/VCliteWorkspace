@@ -27,8 +27,8 @@ export default {
   ],
   methods: {
   fetchBidPrice(price) {
-     this.$store.commit("updateCurrBuyPrice", price);
-     bus.$emit('updateTabIndex', 0);
+     this.$store.commit("updateCurrSellPrice", price);
+     bus.$emit('updateTabIndex', 1);
     }
   }
 }

@@ -61,6 +61,7 @@
 import OrderSummary from '@/components/OrderSummary.vue'
 import { bus } from '../main'
 import axios from 'axios'
+import { authHeader } from '../_helpers/auth-header'
 
 export default {
   data() {
@@ -68,7 +69,6 @@ export default {
       share_id: this.$route.params.shareid,
       buyOrderQty: 0,
       sellOrderQty: 0,
-      buyOrderPrice: this.$store.state.currBuyPrice,
       sellOrderPrice: 0,
       modalShow: false,
       status: 'not_accepted',
@@ -99,8 +99,7 @@ export default {
       this.$refs['buy-modal'].show();
       var orderPrice = document.getElementById('buypriceId').value;
       this.$store.commit("updateCurrBuyPrice", orderPrice);
-
-    },
+      },
     placeSellOrder() {
       this.sellOrderQty = this.$refs['sellQtyInput'].value;
       this.$refs['sell-modal'].show()
@@ -114,6 +113,22 @@ export default {
           variant: 'success',
           autoHideDelay: 3000,
         })
+      console.log("Executing Order");
+      const axios_request = {
+        url: 'http://127.0.0.1:8000/apiv0/order/execute/',
+        method: 'POST',
+        headers: authHeader(),
+        data: {
+          price: this.$store.state.currBuyPrice,
+          quantity: this.buyOrderQty,
+          updated_quantity: this.buyOrderQty,
+          user: 'pranjal', 
+          share: this.filterShare()[0].name,
+          order_type: 'BUY'
+        }
+      };
+        axios(axios_request)
+        .then(response => (this.info = response.data))
     },
     SellOrderConfirm() {
       this.$refs['sell-modal'].hide();
@@ -122,6 +137,22 @@ export default {
           variant: 'danger',
           autoHideDelay: 3000,
         })
+      console.log("Executing Sell Order");
+      const axios_request = {
+        url: 'http://127.0.0.1:8000/apiv0/order/execute/',
+        method: 'POST',
+        headers: authHeader(),
+        data: {
+          price: this.$store.state.currSellPrice,
+          quantity: this.sellOrderQty,
+          updated_quantity: this.sellOrderQty,
+          user: 'pranjal', 
+          share: this.filterShare()[0].name,
+          order_type: 'SELL'
+        }
+      };
+        axios(axios_request)
+        .then(response => (this.info = response.data))
     },
   },
   computed: {
