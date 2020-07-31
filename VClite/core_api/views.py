@@ -62,7 +62,15 @@ class OrderExecutedViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = VC_T_User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        username = str(self.request.user.username)
+        if(username != None):
+            queryset = VC_T_User.objects.filter(username=username)
+            return queryset
+        else:
+            return VC_T_User.objects.none()
 
 
 class OrderQViewSet(viewsets.ModelViewSet):
@@ -162,6 +170,15 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = VC_T_Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        userId = self.request.user.id
+        print(self.request.user)
+        if(userId != None):
+            queryset = VC_T_Order.objects.filter(user__id__iexact=userId)
+            return queryset
+        else:
+            return VC_T_User.objects.none()
 
     @ action(methods=['POST'], detail=False, url_path='execute')
     def execute_order(self, request):

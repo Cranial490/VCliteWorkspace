@@ -141,12 +141,12 @@ def Trade(bid, ask, volume, parentOrder):
             childBid.save()
             childAsk.save()
 
-            queueEntry = OrderQ(buyer=bid.user,
-                                seller=ask.user,
-                                buyer_order_child=childBid,
-                                seller_order_child=childAsk,
-                                price=bid.bid_price,
-                                quantity=ask.quantity)
+            queueEntry = VC_T_Order_Queue(buyer=bid.user,
+                                          seller=ask.user,
+                                          buyer_order_child=childBid,
+                                          seller_order_child=childAsk,
+                                          price=bid.bid_price,
+                                          quantity=ask.quantity)
 
     elif parentOrder.order_type == 'SELL':
         if volume > 0:
@@ -200,12 +200,12 @@ def Trade(bid, ask, volume, parentOrder):
             childBid.save()
             childAsk.save()
 
-            queueEntry = OrderQ(buyer=bid.user,
-                                seller=ask.user,
-                                buyer_order_child=childBid,
-                                seller_order_child=childAsk,
-                                price=ask.ask_price,
-                                quantity=bid.quantity)
+            queueEntry = VC_T_Order_Queue(buyer=bid.user,
+                                          seller=ask.user,
+                                          buyer_order_child=childBid,
+                                          seller_order_child=childAsk,
+                                          price=ask.ask_price,
+                                          quantity=bid.quantity)
 
     queueEntry.save()
     return queueEntry

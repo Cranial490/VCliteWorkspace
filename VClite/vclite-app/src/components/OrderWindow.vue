@@ -7,7 +7,7 @@
           <div class="d-block text-center">
             <h3>Invoice</h3>
             <OrderSummary 
-            :user="'None'"
+            :user="$store.state.userLog"
             :price="$store.state.currBuyPrice"
             :quantity="buyOrderQty"
             :share="filterShare()[0]"
@@ -21,7 +21,7 @@
           <div class="d-block text-center">
             <h3>Invoice</h3>
             <OrderSummary 
-            :user="'None'"
+            :user="$store.state.userLog"
             :price="$store.state.currSellPrice"
             :quantity="sellOrderQty"
             :share="filterShare()[0]"
@@ -74,6 +74,7 @@ export default {
       status: 'not_accepted',
       tabIndex: 0,
       isLoaded: false,
+      userData: this.$store.state.userLog,
     }
   },
   components: {
@@ -122,7 +123,7 @@ export default {
           price: this.$store.state.currBuyPrice,
           quantity: this.buyOrderQty,
           updated_quantity: this.buyOrderQty,
-          user: 'pranjal', 
+          user: this.userData[0].username, 
           share: this.filterShare()[0].name,
           order_type: 'BUY'
         }
@@ -146,7 +147,7 @@ export default {
           price: this.$store.state.currSellPrice,
           quantity: this.sellOrderQty,
           updated_quantity: this.sellOrderQty,
-          user: 'pranjal', 
+          user: this.userData[0].username, 
           share: this.filterShare()[0].name,
           order_type: 'SELL'
         }
