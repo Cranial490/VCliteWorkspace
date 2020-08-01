@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <h1>Orders</h1>
-    {{ orders }}
+    <OrderTable :orders="orders"></OrderTable>
   </div>
 </template>
 
@@ -9,9 +9,11 @@
 // @ is an alias to /src
 import axios from 'axios';
 import { authHeader } from '../_helpers/auth-header'
+import OrderTable from '@/components/OrderTable.vue'
 
 export default {
   components: {
+  	OrderTable,
   },
   data() {
   	return {
@@ -19,7 +21,7 @@ export default {
   	}
   },
   methods: {
-  	getOrders(){
+  	getOrders() {
   	axios.get("http://127.0.0.1:8000/apiv0/order/", {headers: authHeader()})
       .then(res => (this.orders = res.data))
       .catch(err => console.log(err));

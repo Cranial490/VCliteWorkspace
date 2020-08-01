@@ -193,3 +193,10 @@ class OrderViewSet(viewsets.ModelViewSet):
             else:
                 response = {'message': 'Invalid data'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    @ action(methods=['POST'], detail=False, url_path='cancel')
+    def cancel_order(self, request):
+        print("Order Cancelled")
+        # Change parentOrder Status to Cancelled
+        # Delete related Bid and Ask entries
+        #

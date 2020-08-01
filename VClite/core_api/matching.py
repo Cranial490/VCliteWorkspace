@@ -7,8 +7,6 @@ def matching_engine(orderBook, order, parentOrder):
         filled = 0
         consumed_asks = []
         for ask in orderBook:
-            # if ask.user == order.user:
-            #     continue
             if ask.ask_price > order.bid_price:
                 break  # Price of ask is too high, stop filling order
             elif filled == order.quantity:
@@ -35,7 +33,7 @@ def matching_engine(orderBook, order, parentOrder):
 
                 ask.quantity -= volume
                 ask.save()
-                # save the changes made here in ask
+            # save the changes made here in ask
         # Place any remaining volume in LOB
         if filled < order.quantity:
             # self.orderbook.add(Order("limit", "buy", order.price, order.quantity-filled))
@@ -83,7 +81,6 @@ def matching_engine(orderBook, order, parentOrder):
         # Remove bids used for filling order
         for bid in consumed_bids:
             bid.delete()
-
     else:
         order.save()
         # Order did not cross the spread, place in order book
@@ -109,6 +106,8 @@ def Trade(bid, ask, volume, parentOrder):
             if(parentOrder.updated_quantity == 0):
                 parentOrder.order_status = "EXECUTED"
             parentOrder.save()
+            ask.parent_order.updated_quantity -= volume
+            ask.parent_order.save()
             childBid.save()
             childAsk.save()
 
@@ -166,7 +165,7 @@ def Trade(bid, ask, volume, parentOrder):
 
             parentOrder.save()
 
-            bid.parent_order.updated_quantity -= bid.quantity
+            bid.parent_order.updated_quantity -= volume
             bid.parent_order.save()
             childBid.save()
             childAsk.save()
