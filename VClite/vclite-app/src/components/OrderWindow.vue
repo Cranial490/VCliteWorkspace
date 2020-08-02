@@ -182,7 +182,6 @@ export default {
   .placer {
     margin-top: 10px;
   }
-
   label {
     display: inline-block;
     width:100px;
@@ -207,6 +206,9 @@ export default {
   }
 .checkbox-1{
   float: left;
+  }
+  h6 {
+    margin-top: 0.5rem;
   }
 
 </style>

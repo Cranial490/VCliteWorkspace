@@ -14,7 +14,7 @@
     </thead>
     <tbody>
       <tr v-for="order in orders" :key="order.id">
-        <td>{{ order.share }}</td>
+        <td>{{ getShareName(order.share)[0].name }}</td>
         <td>{{ order.price }}</td>
         <td>{{ order.quantity }}</td>
         <td>{{ order.updated_quantity }}</td>
@@ -34,6 +34,11 @@
 import axios from 'axios';
 import { authHeader } from '../_helpers/auth-header'
 export default {
+  data() {
+    return {
+      shareName: "",
+    }
+  },
   props: [
     "orders"
   ],
@@ -54,6 +59,11 @@ export default {
       };
       axios(axios_request)
       .then(response => (this.info = response.data))
+    },
+    getShareName(id) {
+      return this.$store.state.shares.filter((share)=> {
+        return share.id == id
+      })
     }
   }
 }

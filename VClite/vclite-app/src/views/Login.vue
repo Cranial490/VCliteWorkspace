@@ -71,8 +71,7 @@ export default {
   /*width:50%;*/
 }
 .loginBox {
-    width:35%;
-    height:50%;
+    width:25%;
     padding:30px;
     padding-top:50px;
 }
