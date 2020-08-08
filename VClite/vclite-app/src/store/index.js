@@ -16,6 +16,7 @@ export default new Vuex.Store({
   	currSellPrice: 0,
   	orderType: "",
     userLog: [],
+    // orders: [],
   },
   plugins: [createPersistedState()],
   mutations: {
@@ -34,7 +35,10 @@ export default new Vuex.Store({
   	},
     updateLogUser(state,userLog) {
       state.userLog = userLog;
-    }
+    },
+    // updateOrders(state, orders) {
+    //   state.orders = orders;
+    // }
   },
   actions: {
   	getShares({commit}) {
@@ -52,7 +56,15 @@ export default new Vuex.Store({
         commit('updateLogUser', userLog)
       })
       .catch(err => console.log(err));
-    }
+    },
+    // getOrders({commit}) {
+    //   axios.get("http://127.0.0.1:8000/apiv0/order/", {headers: authHeader()})
+    //   .then(res => res.data)
+    //   .then(orders => {
+    //     commit('updateOrders', orders)
+    //   })
+    //   .catch(err => console.log(err));
+    // },
   },
   modules: {
     alert,

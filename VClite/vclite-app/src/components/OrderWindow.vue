@@ -130,6 +130,7 @@ export default {
       };
         axios(axios_request)
         .then(response => (this.info = response.data))
+        .catch(err => console.log(err));
     },
     SellOrderConfirm() {
       this.$refs['sell-modal'].hide();
@@ -154,6 +155,7 @@ export default {
       };
         axios(axios_request)
         .then(response => (this.info = response.data))
+        .catch(err => console.log(err));
     },
   },
   computed: {
@@ -174,41 +176,41 @@ export default {
 
 <style>
   .orderWindow {
-    /*width: 30%;*/
-    border: 1px solid #f1f1f1;
-    padding: 10px;
-    border-radius: 25px;
-  }
+      /*width: 30%;*/
+      border: 1px solid #f1f1f1;
+      padding: 10px;
+      border-radius: 25px;
+    }
   .placer {
-    margin-top: 10px;
-  }
+      margin-top: 10px;
+    }
   label {
-    display: inline-block;
-    width:100px;
-    text-align: left;
-    margin-right: 0px;
-  }
+      display: inline-block;
+      width:100px;
+      text-align: left;
+      margin-right: 0px;
+    }
   .place-order {
-    width: 50%;
-    margin: 0 auto;
-  }
+      width: 50%;
+      margin: 0 auto;
+    }
   .closeBtn {
-    width:10%;
-  }
+      width:10%;
+    }
   .billField{
-  text-align: left;
-  }
-.billData {
-  text-align: right;
-  }
-.spanText {
-  float:right;
-  }
-.checkbox-1{
-  float: left;
-  }
+    text-align: left;
+    }
+  .billData {
+    text-align: right;
+    }
+  .spanText {
+    float:right;
+    }
+  .checkbox-1{
+    float: left;
+    }
   h6 {
-    margin-top: 0.5rem;
-  }
+      margin-top: 0.5rem;
+    }
 
 </style>

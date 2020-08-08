@@ -41,6 +41,16 @@ Vue.use(VueRouter)
     name: 'Explore',
     component: () => import('../views/Explore.vue')
   },
+  {
+    path: '/edit',
+    name: 'Edit',
+    component: () => import('../views/EditUser.vue')
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue')
+  },
   { path: '*', redirect: '/' }
 ]
 

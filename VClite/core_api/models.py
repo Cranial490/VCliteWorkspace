@@ -103,6 +103,9 @@ class VC_T_Order_Executed(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.parent_order.share.name + '@' + str(self.price) + '-' + str(self.filled_quantity)
+
 
 class VC_T_Order_Queue(models.Model):
     class OrderStatus(models.TextChoices):
@@ -130,3 +133,6 @@ class VC_T_Order_Queue(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.buyer.username + '-' + self.seller.username + '-' + str(self.price)

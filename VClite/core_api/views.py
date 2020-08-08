@@ -30,7 +30,7 @@ class AskViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         id = self.request.query_params.get('share_id')
-        if(id != None):
+        if(id is not None):
             queryset = VC_T_Ask.objects.filter(
                 share__id__contains=id).order_by('ask_price')
             return queryset
@@ -45,7 +45,7 @@ class BidViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         id = self.request.query_params.get('share_id')
-        if(id != None):
+        if(id is not None):
             queryset = VC_T_Bid.objects.filter(
                 share__id__contains=id).order_by('-bid_price')
             return queryset
@@ -59,6 +59,11 @@ class OrderExecutedViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
 
+def user_data_valid(request):
+    print(request.user)
+    return True
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = VC_T_User.objects.all()
     serializer_class = UserSerializer
@@ -66,11 +71,22 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         username = str(self.request.user.username)
-        if(username != None):
+        if(username is not None):
             queryset = VC_T_User.objects.filter(username=username)
             return queryset
         else:
             return VC_T_User.objects.none()
+
+    @ action(methods=['POST'], detail=False, url_path='update')
+    def update_user_details(self, request):
+        print(request.user)
+        if request.method == 'POST':
+            if(user_data_valid(request)):
+                response = {'message': 'Order placed successfully'}
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                response = {'message': 'Invalid data'}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OrderQViewSet(viewsets.ModelViewSet):
@@ -166,6 +182,14 @@ def validate_data(request):
         return False
 
 
+def order_valid(request):
+    orderData = VC_T_Order.objects.filter(id__iexact=request.data['id'])
+    if orderData.count() > 0:
+        return orderData
+    else:
+        return None
+
+
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = VC_T_Order.objects.all()
     serializer_class = OrderSerializer
@@ -197,6 +221,27 @@ class OrderViewSet(viewsets.ModelViewSet):
     @ action(methods=['POST'], detail=False, url_path='cancel')
     def cancel_order(self, request):
         print("Order Cancelled")
-        # Change parentOrder Status to Cancelled
-        # Delete related Bid and Ask entries
-        #
+        if request.method == 'POST':
+            order = order_valid(request)[0]
+            if order != None:
+                order.order_status = "CANCELLED"
+                order.save()
+                print(order)
+                if order.order_type == "BUY":
+                    relatedBid = VC_T_Bid.objects.filter(
+                        parent_order__id__iexact=order.id)[0]
+                    print(relatedBid)
+                    relatedBid.delete()
+                elif order.order_type == "SELL":
+                    relatedAsk = VC_T_Ask.objects.filter(
+                        parent_order__id__iexact=order.id)[0]
+                    print(relatedAsk)
+                    relatedAsk.delete()
+                response = {'message': 'Order Cancelled'}
+                return Response(response, status=status.HTTP_200_OK)
+            else:
+                response = {'message': 'Order Invalid'}
+                return Response(response, status=status.HTTP_400_BAD_REQUEST)
+                # Change parentOrder Status to Cancelled
+                # Delete related Bid and Ask entries
+                #

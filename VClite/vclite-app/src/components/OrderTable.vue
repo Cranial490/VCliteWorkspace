@@ -20,7 +20,7 @@
         <td>{{ order.updated_quantity }}</td>
         <td><b-badge :variant="getOrderType(order)">{{ order.order_type }}</b-badge></td>
         <td><b-badge>{{ order.order_status }}</b-badge></td>
-        <td><b-button variant="danger" size="sm" :disabled="order.updated_quantity==0" @click="cancelOrder()">Cancel Order</b-button></td>
+        <td><b-button v-if="isVisible" variant="danger" size="sm" :disabled="order.updated_quantity==0 || order.order_status=='CANCELLED' " @click="cancelOrder(order.id)">Cancel Order</b-button></td>
 
       </tr>
     </tbody>
@@ -34,13 +34,9 @@
 import axios from 'axios';
 import { authHeader } from '../_helpers/auth-header'
 export default {
-  data() {
-    return {
-      shareName: "",
-    }
-  },
   props: [
-    "orders"
+    "orders",
+    "isVisible"
   ],
   methods: {
     getOrderType(order) {
@@ -51,20 +47,22 @@ export default {
         return "danger"
       }
     },
-    cancelOrder() {
+    cancelOrder(id) {
       const axios_request = {
         url: 'http://127.0.0.1:8000/apiv0/order/cancel/',
         method: 'POST',
         headers: authHeader(),
+        data: {id: id}
       };
       axios(axios_request)
       .then(response => (this.info = response.data))
+      .then(alert("ORDER CANCELLED"))
     },
     getShareName(id) {
       return this.$store.state.shares.filter((share)=> {
         return share.id == id
       })
     }
-  }
+  },
 }
 </script>
