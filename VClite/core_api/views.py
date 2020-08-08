@@ -242,6 +242,3 @@ class OrderViewSet(viewsets.ModelViewSet):
             else:
                 response = {'message': 'Order Invalid'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
-                # Change parentOrder Status to Cancelled
-                # Delete related Bid and Ask entries
-                #
