@@ -6,7 +6,10 @@ from django.contrib.auth.models import AbstractUser
 
 
 class CustomUser(AbstractUser):
-    dpid = models.CharField(max_length=16)
+    dpid = models.CharField(max_length=16, unique=True, null = True) #16 digit
+    pan_no = models.CharField(max_length=10, unique=True, null = True) #10 digit
+    phone_no = models.CharField(max_length=10, unique=True)
+    email = models.CharField(max_length =40, unique=True)
 
 
 class Share(models.Model):
@@ -74,8 +77,8 @@ class Order(models.Model):
 
 class OrderQ(models.Model):
     class OrderStatus(models.TextChoices):
-        SUBMITTED = 'SUBMITTED'
-        PROCESSING = 'PROCESSING'
+        PENDING = 'PENDING'
+        EXECUTED = 'EXECUTED'
         FAILED = 'FAILED'
         COMPLETE = 'COMPLETE'
         CANCELLED = 'CANCELLED'
@@ -90,7 +93,7 @@ class OrderQ(models.Model):
     order_status = models.CharField(
         max_length=10,
         choices=OrderStatus.choices,
-        default=OrderStatus.SUBMITTED
+        default=OrderStatus.EXECUTED
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     isSideVisible: function() {
-      if(this.$route.name === "Login") {
+      if(this.$route.name === "Login" || this.$route.name === "Register1" || this.$route.name === "Register2" || this.$route.name === "Register3") {
         return false;
       }
       else {

@@ -36,13 +36,13 @@ def matching_engine(orderBook, orderType, order):
         if filled < order.quantity:
             # self.orderbook.add(Order("limit", "buy", order.price, order.quantity-filled))
             order.quantity = order.quantity - filled
-            createBid(order)
+            createBid(order)  # TODO if we do this we will have 2 orders at 1 point of time (Rs.20,10) and (Rs.20,4)
             print("add remaining order to table" +
-                  str(order.quantity - filled))
+                  str(order.quantity - filled)) # TODO -> problem here -> should be str(order.quantity)
 
         # Remove asks used for filling order
         for ask in consumed_asks:
-            ask.delete()
+            ask.delete() #TODO update bids order, coz if we create bid order timestamp will be latest
             print("Delete consumed orders from table" + str(ask.quantity))
         return consumed_asks
     elif orderType == 'sell' and orderBook.exists():
@@ -111,7 +111,6 @@ def Trade(bid, ask, volume, parentOrder, orderType):
                             price=bid.bid_price, quantity=bid.quantity, order=parentOrder)
     qEntry.save()
     return qEntry
-
 
 def createAsk(order):
     ask = Ask(user=order.user, share=order.share,

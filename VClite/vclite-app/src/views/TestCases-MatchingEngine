@@ -1,0 +1,235 @@
+Basic TestCase
+--------------
+Buyer - (Ak, BBQ, Rs20, 4, 10:15)
+Seller - (Ak, BBQ, Rs20, 3, 10:17)
+so while matching orders keep in mind that the buyer_user_id != seller_user_id
+
+TODO: Also write the logic for Refund based on Cancelled orders (Part of Payment Gateway???)
+
+When 1 cancels order -> delete it from ask/bid table and also 
+
+bid.parentOrder.status = Cancelled
+We shud keep bid.parentOrder.UpdatedQuantity as itself, shouldn't update it to 0
+
+TestSuite 1 - No orders are being cancelled
+=============================================
+
+TestCase1
+---------
+
+Buyer - (Ak,BBQ,Rs20,10)
+
+Seller - 
+(PP,BBQ,Rs20,3,10:14)
+(MA,BBQ,Rs20,3,10:15)
+(PU,BBQ,Rs20,4,10:16)
+
+TestCase2
+---------
+
+Buyer - (Ak, BBQ, Rs20, 10, 10:13)
+
+Seller - 
+(PP,BBQ,Rs20,3,10:14)
+(MA,BBQ,Rs20,3,10:15)
+(PU,BBQ,Rs21,4,10:14)
+
+Buyer - (Bk, BBQ, Rs21, 7, 10:14)
+
+TestCase3
+----------
+
+Buyer - (Ak, BBQ, Rs20, 10)
+
+Seller - 
+(PP,BBQ,Rs21,5,10:14)
+(MA,BBQ,Rs23,3,10:15)
+
+Buyer- (Bk, BBQ, Rs23, 2, 10:16)
+
+TestCase4 (Mirror to TC 1)
+---------
+
+Seller - (Ak,BBQ,Rs20,10)
+
+Buyer - 
+(PP,BBQ,Rs20,3,10:14)
+(MA,BBQ,Rs20,3,10:15)
+(PU,BBQ,Rs20,4,10:16)
+
+TestCase5 (Mirror to TC 2)
+---------
+
+Seller - (Ak,BBQ,Rs20,10)
+
+Buyer - 
+(PP,BBQ,Rs20,3,10:14)
+(MA,BBQ,Rs20,3,10:15)
+(PU,BBQ,Rs21,4,10:14)
+
+Seller - (Bk, BBQ, Rs21, 7, 10:14)
+
+TestCase6 (Mirror to TC 3)
+---------
+
+Seller - (Ak,BBQ,Rs20,10)
+
+Buyer - 
+(PP,BBQ,Rs22,3,10:14)
+(MA,BBQ,Rs23,3,10:15)
+
+Seller - (Bk, BBQ, Rs23, 2, 10:16)
+
+
+TestSuite2 - Orders are being cancelled
+========================================
+TestCase1
+----------
+
+Buyer - (Ak,BBQ,Rs20,10,10:14)
+
+Seller - 
+(PP,BBQ,Rs20,3,10:14)
+(MA,BBQ,Rs20,3,10:15)
+(PU,BBQ,Rs20,4,10:16)
+
+Buyer - (Ak, BBQ, Rs20, Cancel Order, 10:17)
+
+
+TestCase2
+----------
+
+Buyer - (Ak,BBQ,Rs20,10,10:14)
+
+Seller - 
+(PP,BBQ,Rs20,3,10:14)
+(MA,BBQ,Rs20,3,10:15)
+
+Buyer - (Ak, BBQ, Rs20, Cancel Order, 10:15)
+
+Seller - (PU,BBQ,Rs20,4,10:16)
+
+TestCase3
+----------
+
+Buyer - (Ak, BBQ, Rs20, 10, 10:14)
+
+Seller - (PP, BBQ, Rs20, 4, 10:15)
+Seller - (MA, BBQ, Rs20, 9, 10:17)
+
+Seller - (MA, BBQ, Rs20, Cancel Order, 10:18)
+
+Buyer - (Ak, BBQ, Rs20, Cancel Order, 10:18)
+
+
+TestCase4 (Mirror to TestCase1)
+TestCase5 (Mirror to TestCase2)
+TestCase6 (Mirror to TestCase3)
+
+TestCase7 
+----------
+
+Buyer - 
+(Ak, BBQ, Rs20, 1, 10:15)
+(Ak, BBQ, Rs20, 1, 10:16)
+(Ak, BBQ, Rs20, 1, 10:17)
+(Ak, BBQ, Rs20, 1, 10:18)
+(Ak, BBQ, Rs20, 1, 10:19)
+(Ak, BBQ, Rs20, 1, 10:20)
+
+Seller - 
+(PP, BBQ, Rs20, 6, 10:22)
+
+
+?????? -> Should we give an option to cancel all open orders ?????
+
+?????? -> Suppose a buyer  has to update his bid price, should we give him an option to update it in the Postions Section or shud he cancel it and then place a new order. In our case if he updates the price, following 2 scenarios:
+
+1) reduced the price -> partial refund initiated
+2) increased the price -> Redirect to Payment Portal (different logic for measuring cost)
+
+(Should not give)
+
+?????? Seller -> Before he can place an order, we just need his DPID ryt?
+?????? Buyer -> Before he can place an order, we just need his DPID ryt?
+
+
+????? -> Matching Engine Time Complexity - (Matching algorithm should be highly efficient/optimized) (db hits etc.)
+
+
+
+Note: Payment will be taken before placing the order in terminal (before it is in PENDING STATE)
+
+
+TESTCASE 8
+-----------
+
+
+Buyer - (Ak, BBQ, Rs20, 10, 10:10)
+
+
+Seller - (PP, BBQ, Rs20, 2, 10:11)
+(PU, BBQ, Rs20, 2, 10:11:30)
+
+Buyer - (Bk, BBQ, Rs20, 15, 10:12)
+
+Seller - (MA, BBQ, Rs20, 25, 10:13)
+
+Buyer - (Ck, BBQ, Rs20, 4, 10:14)
+
+
+TESTCASE 9
+-----------
+
+Buyer - (Ak, BBQ, Rs20, 5, 10:14)
+
+Seller - (PP, BBQ, Rs20, 10, 10:15)
+
+Buyer - (PP, BBQ, Rs20, 5, 10:16)
+
+Seller - (Ak, BBQ, Rs20, 10, 10:19)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

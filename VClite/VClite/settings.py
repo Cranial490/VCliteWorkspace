@@ -30,7 +30,6 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'core_api.CustomUser'
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     'core_api',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_jwt',
 ]
 
 MIDDLEWARE = [
@@ -97,7 +97,7 @@ JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=1000),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(seconds=10000),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(seconds=6000),
 }
 
 # Database
