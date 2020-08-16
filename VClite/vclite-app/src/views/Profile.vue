@@ -1,41 +1,26 @@
 <template>
 	<div class="content">
     <h1>Profile</h1>
-   	<div class="header">User Details
-	</div>
-	<div class="edit-link"> <b-link to="/edit">Edit</b-link>
-	</div><br>
-   	<hr>
-   	<div class="user-profile">
-    <div class="userDeets-1">
-    	<b-container class="bv-example-row">
-		  <b-row>
-		    <b-col>Name: {{ userData[0].username }}</b-col>
-		    <b-col>Email: pranjal.paliwal@gmail.com</b-col>
-		    <b-col></b-col>
-		  </b-row>
-		</b-container>
-    </div>
-    <div class="userDeets-2">
-    	<b-container class="bv-example-row">
-		  <b-row>
-		    <b-col><label>First Name:</label> <span>Pranjal</span></b-col>
-		    <b-col><label>Last Name:</label> Paliwal</b-col>
-		    <b-col></b-col>
-		  </b-row>
-		</b-container>
-    </div>
- 	<div class="userDeets-3">
-    	<b-container class="bv-example-row">
-		  <b-row>
-		    <b-col><label>Phone No:</label> <span>9783581492</span></b-col>
-		    <b-col><label>DPID:</label> 12345678</b-col>
-		    <b-col></b-col>
-		  </b-row>
-		</b-container>
-    </div>
-	</div>
-    <hr>
+   	<div class="user-info">
+   		<b-card title="" body-class="text-center" header-tag="nav">
+	    <template v-slot:header>
+	      <b-nav card-header tabs>
+	        <!-- <b-nav-item active></b-nav-item> -->
+	        <b-link class="edit" to="/edit"><b>EDIT</b></b-link>
+	      </b-nav>
+	    </template>
+
+	    <b-card-text>
+	      <p class= "user-field" id="username"><b>Username:</b> {{ userData[0].username }}</p><br>		   
+		  <p class= "user-field" id="name"><b>Name:</b> {{ userData[0].first_name }} {{ userData[0].last_name }}</p><br>
+	      <p class= "user-field" id="email"><b>Email:</b> {{ userData[0].email }}</p><br>
+	      <p class= "user-field" id="phone"><b>Phone:</b> {{ userData[0].phone_no}}</p><br>
+	      <p class= "user-field" id="dpid"><b>DPID:</b> {{ userData[0].dpid}}</p><br>
+	      <p class= "user-field" id="pan"><b>PAN:</b> {{ userData[0].pan_no}}</p><br>
+	    </b-card-text>
+
+	  </b-card>
+   	</div>
   </div>
 </template>
 <script>
@@ -57,35 +42,21 @@ export default {
   width:75%;
   float:right;
 }
-.userDeets-1 {
-  /*border: 1px solid;*/
-  margin: 20px;
-  height: 40px;
-
+.user-field{
+	float:left;
+	margin-left:30%;
+	margin-bottom:10px;
 }
-.userDeets-2 {
-  /*border: 1px solid;*/
-  margin: 0px;
-  height: 25px;
-
+p {
+    margin-top: 0;
+    margin-bottom: 0;
 }
-.userDeets-3 {
-  /*border: 1px solid;*/
-  margin: 20px;
-  height: 25px;
-
+.edit {
+	float:right;
+	margin-bottom:10px;
 }
-.user-profile {
-	height: 120px;
-}
-.header {
-	float: left;
-	margin-left: 20px;
-	margin-bottom: 0px;
-	font-size:30px;
-
-}
-.edit-link {
-	float: right;
+.user-info {
+	width: 500px;
+	margin-left:30%;
 }
 </style>

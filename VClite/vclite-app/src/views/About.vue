@@ -16,3 +16,10 @@ export default {
   },
 }
 </script>
+
+<style>
+.content {
+  width:75%;
+  float:right;
+}
+</style>

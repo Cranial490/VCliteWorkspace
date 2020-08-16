@@ -130,6 +130,7 @@ export default {
       };
         axios(axios_request)
         .then(response => (this.info = response.data))
+        .then(this.$router.go())
         .catch(err => console.log(err));
     },
     SellOrderConfirm() {
@@ -155,6 +156,7 @@ export default {
       };
         axios(axios_request)
         .then(response => (this.info = response.data))
+        .then(this.$router.go())
         .catch(err => console.log(err));
     },
   },

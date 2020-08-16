@@ -22,6 +22,7 @@
           </template>
           <b-dropdown-item :to="{ path: '/profile' }">Profile</b-dropdown-item>
           <b-dropdown-item href="#">Support</b-dropdown-item>
+          <b-dropdown-item :to="{ path: '/faq' }">FAQ</b-dropdown-item>
           <b-dropdown-item :to="{ path: '/login' }">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>

@@ -4,17 +4,17 @@
 
     	<div class="edit-form">
 		  <b-input-group size="mt-3" prepend="Username">
-		    <b-form-input v-model="username"></b-form-input>
+		    <b-form-input v-model="username" readonly></b-form-input>
 		  </b-input-group>
 
 		  <!-- Using slots -->
 		  <b-input-group class="mt-3" prepend="First Name">
-		    <b-form-input v-model="firstName"></b-form-input>
+		    <b-form-input v-model="firstName" readonly></b-form-input>
 		  </b-input-group>
 
 		  <!-- Using slots -->
 		  <b-input-group class="mt-3" prepend="Last Name">
-		    <b-form-input v-model="lastName"></b-form-input>
+		    <b-form-input v-model="lastName" readonly></b-form-input>
 		  </b-input-group>
 
 		  <!-- Using slots -->
@@ -31,7 +31,11 @@
 		    <b-form-input v-model="dpid"></b-form-input>
 		  </b-input-group>
 
-		  <b-button class="mt-3" variant="outline-primary" @click="UpdateData">Button</b-button>
+		  <b-input-group class="mt-3" prepend="PAN">
+		    <b-form-input v-model="pan"></b-form-input>
+		  </b-input-group>
+
+		  <b-button class="mt-3" variant="outline-primary" @click="UpdateData">Save</b-button>
 		</div>
 
 	</div>
@@ -51,6 +55,7 @@
 	    Email: this.$store.state.userLog[0].email,
 	    phnNo: this.$store.state.userLog[0].phone_no,
 	    dpid: this.$store.state.userLog[0].dpid,
+	    pan: this.$store.state.userLog[0].pan_no
 	  }
 	},
 	methods: {
@@ -61,10 +66,19 @@
 	    method: 'POST',
 	    headers: authHeader(),
 	    data: {
+	    	id: this.$store.state.userLog[0].id,
+	    	username: this.username,
+	    	email:this.Email,
+	    	phone_no:this.phnNo,
+	    	dpid:this.dpid,
+	    	pan_no:this.pan
 	    }
 	  };
 	    axios(axios_request)
 	    .then(response => (this.info = response.data))
+	    .then(alert("Saved"))
+	    .then(this.$router.push('Home'))
+	    .then(this.$router.go())
 	    .catch(err => console.log(err));
 	  }
 	}
@@ -82,5 +96,9 @@
 	position: fixed;
     left: 63%;
     transform: translate(-50%, 0);
+}
+.form-control[readonly] {
+    background-color: #f6f5fb	;
+    opacity: 1;
 }
 </style>

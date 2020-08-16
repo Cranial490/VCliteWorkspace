@@ -59,9 +59,44 @@ class OrderExecutedViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
 
+def dataValid(data):
+    if int(data['price']) > 0 and int(data['quantity']) > 0:
+        return True
+    else:
+        return False
+
+
+def stringValid(dataString):
+    if dataString and dataString.strip():
+        return True
+    else:
+        return False
+
+
+def userExists(username):
+    if VC_T_User.objects.filter(username=username).count() > 0:
+        return True
+    else:
+        return False
+
+
+def isLoggedUser(request):
+    if(str(request.user.id) == str(request.data['id'])):
+        print("vlaidated2")
+        return True
+    else:
+        return False
+
+
 def user_data_valid(request):
-    print(request.user)
-    return True
+    if(userExists(request.user) and isLoggedUser(request)):
+        if (stringValid(request.data['username']) and
+            stringValid(request.data['phone_no']) and
+            stringValid(request.data['dpid']) and
+                stringValid(request.data['pan_no'])):
+            return True
+    else:
+        return False
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -82,6 +117,14 @@ class UserViewSet(viewsets.ModelViewSet):
         print(request.user)
         if request.method == 'POST':
             if(user_data_valid(request)):
+                logged_user = VC_T_User.objects.filter(
+                    id__iexact=request.data['id'])[0]
+
+                logged_user.email = request.data['email']
+                logged_user.phone_no = request.data['phone_no']
+                logged_user.dpid = request.data['dpid']
+                logged_user.pan_no = request.data['pan_no']
+                logged_user.save()
                 response = {'message': 'Order placed successfully'}
                 return Response(response, status=status.HTTP_200_OK)
             else:
@@ -134,27 +177,6 @@ def createOrder(request):
         )
     # order.save()
     return parentOrder, order
-
-
-def dataValid(data):
-    if int(data['price']) > 0 and int(data['quantity']) > 0:
-        return True
-    else:
-        return False
-
-
-def stringValid(dataString):
-    if dataString and dataString.strip():
-        return True
-    else:
-        return False
-
-
-def userExists(username):
-    if VC_T_User.objects.filter(username=username).count() > 0:
-        return True
-    else:
-        return False
 
 
 def shareExists(name):

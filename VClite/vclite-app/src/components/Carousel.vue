@@ -4,7 +4,9 @@
                :controls-width="30" :controls-height="60" :clickable="false">
     <slide v-for="(slide, i) in $store.state.shares" :index="i" :key="i" :style= "{
            'height': '260px',
-           'border-radius': '10px'
+           'border-radius': '20px',
+           'border-color': '#ffff',
+           'background-color': '#cccccc03'
          }">
       <figure>
         <b-card-group deck>
