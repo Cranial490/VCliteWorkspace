@@ -27,6 +27,7 @@ export default {
   methods: {
   },
   created() {
+    this.$store.dispatch('getUser');
     this.$store.dispatch('getShares')
   },
   computed : {
