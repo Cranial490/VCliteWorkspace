@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import Register1 from '../views/Register1.vue'
+import Register2 from '../views/Register2.vue'
+import Register3 from '../views/Register3.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +18,21 @@ Vue.use(VueRouter)
     path: '/login',
     name: 'Login',
     component: Login
+  },
+  { 
+    path: '/register1',
+    name: 'Register1',
+    component: Register1 
+  },
+  { 
+    path: '/register2',
+    name: 'Register2',
+    component: Register2
+  },
+  { 
+    path: '/register3',
+    name: 'Register3',
+    component: Register3
   },
   {
     path: '/positions',
@@ -52,7 +70,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login'];
+  const publicPages = ['/login', '/register1', '/register2', '/register3'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('user');
 

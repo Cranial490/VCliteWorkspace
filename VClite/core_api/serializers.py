@@ -43,4 +43,6 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = CustomUser.objects.create(**validated_data)
         Token.objects.create(user=user)
+        user.set_password(validated_data['password'])
+        user.save()
         return user

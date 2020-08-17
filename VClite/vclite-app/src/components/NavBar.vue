@@ -29,6 +29,7 @@
   </b-navbar>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 // @ is an alias to /src
 
 export default {
