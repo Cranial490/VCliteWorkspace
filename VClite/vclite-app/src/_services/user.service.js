@@ -109,6 +109,7 @@ function register2(user) {
         return Promise.resolve(res)
     })
     .catch(error => {
+        alert("DPID/Pan Number already exist")
         console.log("error = ", error.response)
         return Promise.reject(error);
     })

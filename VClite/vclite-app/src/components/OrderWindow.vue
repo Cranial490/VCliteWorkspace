@@ -52,7 +52,7 @@
             <div class="form-group">
               <ValidationProvider rules="required|minValue:1" v-slot="{ errors, valid }" >
                 <b-input-group prepend="Qty:">
-                <b-form-input ref="buyQtyInput" type="number" name="s-qty" min=1 v-model="buyOrderQty" :state="errors[0] ? false : (valid ? true : null)" ><br/>
+                <b-form-input ref="buyQtyInput" type="number" name="s-qty" v-model="buyOrderQty" :state="errors[0] ? false : (valid ? true : null)" ><br/>
                   </b-form-input>
                 <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
                 </b-input-group>
