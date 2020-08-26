@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       <tr v-for="share in shares" :key="share.id" @click="fetchDepth(share.id)">
-        <td>{{ share.share_name }}</td>
+        <td>{{ share.name }}</td>
         <td>{{ share.ltp }}</td>
         <td>{{ share.quantity }}</td>
       </tr>

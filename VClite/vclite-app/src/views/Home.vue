@@ -34,7 +34,7 @@ export default {
     resultQuery(){
       if(this.searchQuery){
       return this.$store.state.shares.filter((share)=>{
-        return this.searchQuery.toLowerCase().split(' ').every(v => share.share_name.toLowerCase().includes(v))
+        return this.searchQuery.toLowerCase().split(' ').every(v => share.name.toLowerCase().includes(v))
       })
       }else{
         return this.$store.state.shares;

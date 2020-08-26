@@ -20,9 +20,10 @@
           <template v-slot:button-content>
             <em><b-avatar variant="success" text="PP"></b-avatar></em>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
+          <b-dropdown-item :to="{ path: '/profile' }">Profile</b-dropdown-item>
           <b-dropdown-item href="#">Support</b-dropdown-item>
-          <b-dropdown-item href="#" :to="{ path: '/login' }">Sign Out</b-dropdown-item>
+          <b-dropdown-item :to="{ path: '/faq' }">FAQ</b-dropdown-item>
+          <b-dropdown-item :to="{ path: '/login' }">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>

@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-AUTH_USER_MODEL = 'core_api.CustomUser'
+AUTH_USER_MODEL = 'core_api.VC_T_User'
 
 
 # Application definition
