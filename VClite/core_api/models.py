@@ -5,50 +5,27 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
 
-class CustomUser(AbstractUser):
-    dpid = models.CharField(max_length=16, unique=True, null = True) #16 digit
-    pan_no = models.CharField(max_length=10, unique=True, null = True) #10 digit
+class VC_T_User(AbstractUser):
+    dpid = models.CharField(max_length=16, unique=True, null=True)  # 16 digit
+    pan_no = models.CharField(
+        max_length=10, unique=True, null=True)  # 10 digit
     phone_no = models.CharField(max_length=10, unique=True)
-    email = models.CharField(max_length =40, unique=True)
+    email = models.CharField(max_length=40, unique=True)
 
 
-class Share(models.Model):
-    share_name = models.CharField(max_length=50)
-    s_description = models.CharField(max_length=150)
+class VC_T_Share(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=150)
     ltp = models.FloatField()
     quantity = models.IntegerField()
-
-    def __str__(self):
-        return self.share_name
-
-
-class Bid(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
-    share = models.ForeignKey(Share, on_delete=models.CASCADE)
-    bid_price = models.FloatField()
-    quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.share.share_name + '@' + str(self.bid_price)
+        return self.name
 
 
-class Ask(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
-    share = models.ForeignKey(Share, on_delete=models.CASCADE)
-    ask_price = models.FloatField()
-    quantity = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.share.share_name + '@' + str(self.ask_price)
-
-
-class Order(models.Model):
+class VC_T_Order(models.Model):
     class OrderStatus(models.TextChoices):
         SUBMITTED = 'SUBMITTED'
         PROCESSING = 'PROCESSING'
@@ -56,28 +33,85 @@ class Order(models.Model):
         COMPLETE = 'COMPLETE'
         CANCELLED = 'CANCELLED'
 
+    class OrderType(models.TextChoices):
+        BUY = 'BUY'
+        SELL = 'SELL'
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
-    share = models.ForeignKey(Share, on_delete=models.CASCADE)
+    share = models.ForeignKey(VC_T_Share, on_delete=models.CASCADE)
     price = models.FloatField()
     quantity = models.IntegerField()
-    # create orde status enums - PROCESSING, COMPLETE, FAILED ....
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
+    updated_quantity = models.IntegerField()
     order_status = models.CharField(
         max_length=10,
         choices=OrderStatus.choices,
         default=OrderStatus.SUBMITTED
     )
+    order_type = models.CharField(
+        max_length=4,
+        choices=OrderType.choices,
+        default=OrderType.BUY
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.share.share_name + '@' + str(self.price) + '-' + str(self.quantity)
+        return self.share.name + '@' + str(self.price) + '-' + str(self.quantity)
 
 
-class OrderQ(models.Model):
+class VC_T_Bid(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    share = models.ForeignKey(VC_T_Share, on_delete=models.CASCADE)
+    bid_price = models.FloatField()
+    quantity = models.IntegerField()
+    parent_order = models.ForeignKey(VC_T_Order, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.share.name + '@' + str(self.bid_price)
+
+
+class VC_T_Ask(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
+    share = models.ForeignKey(VC_T_Share, on_delete=models.CASCADE)
+    ask_price = models.FloatField()
+    quantity = models.IntegerField()
+    parent_order = models.ForeignKey(VC_T_Order, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.share.name + '@' + str(self.ask_price)
+
+
+class VC_T_Order_Executed(models.Model):
     class OrderStatus(models.TextChoices):
-        PENDING = 'PENDING'
+        EXECUTED = 'EXECUTED'
+        FAILED = 'FAILED'
+        COMPLETE = 'COMPLETE'
+
+    parent_order = models.ForeignKey(VC_T_Order, on_delete=models.CASCADE)
+    price = models.FloatField()
+    filled_quantity = models.IntegerField()
+    order_status = models.CharField(
+        max_length=10,
+        choices=OrderStatus.choices,
+        default=OrderStatus.EXECUTED
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.parent_order.share.name + '@' + str(self.price) + '-' + str(self.filled_quantity)
+
+
+class VC_T_Order_Queue(models.Model):
+    class OrderStatus(models.TextChoices):
+        SUBMITTED = 'SUBMITTED'
         EXECUTED = 'EXECUTED'
         FAILED = 'FAILED'
         COMPLETE = 'COMPLETE'
@@ -87,13 +121,20 @@ class OrderQ(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='buyer2seller')
     seller = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='seller2buyer')
+    buyer_order_child = models.ForeignKey(
+        VC_T_Order_Executed, on_delete=models.CASCADE, related_name='buyerOrder')
+    seller_order_child = models.ForeignKey(
+        VC_T_Order_Executed, on_delete=models.CASCADE, related_name='sellerOrder')
     price = models.FloatField()
     quantity = models.IntegerField()
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
     order_status = models.CharField(
         max_length=10,
         choices=OrderStatus.choices,
-        default=OrderStatus.EXECUTED
+        default=OrderStatus.SUBMITTED
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.buyer.username + '-' + self.seller.username + '-' + str(self.price)

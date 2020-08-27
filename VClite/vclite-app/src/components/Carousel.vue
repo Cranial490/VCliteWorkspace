@@ -4,7 +4,9 @@
                :controls-width="30" :controls-height="60" :clickable="false">
     <slide v-for="(slide, i) in $store.state.shares" :index="i" :key="i" :style= "{
            'height': '260px',
-           'border-radius': '10px'
+           'border-radius': '20px',
+           'border-color': '#ffff',
+           'background-color': '#cccccc03'
          }">
       <figure>
         <b-card-group deck>
@@ -12,8 +14,8 @@
             header="Featured"
             header-tag="header"
             >
-            <b-card-title>{{ slide.share_name }}</b-card-title>
-            <b-card-text>{{ slide.s_description }}</b-card-text>
+            <b-card-title>{{ slide.name }}</b-card-title>
+            <b-card-text>{{ slide.description }}</b-card-text>
             <b-button @click="getDetails()" variant="primary">Details</b-button>
             <template v-slot:footer>
               <small class="text" :style="{'font-size': 'larger', 'font-weight':'bold'}">LTP: Rs.{{ slide.ltp }}</small>
@@ -30,11 +32,6 @@
 // @ is an alias to /src
 import { Carousel3d, Slide } from 'vue-carousel-3d';
 export default {
- data() {
-    return {
-      slides: $store.state.shares.length,
-    }
-  },
   components: {
     Carousel3d,
     Slide
