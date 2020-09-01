@@ -31,8 +31,8 @@ const actions = {
         commit('logout');
     },
 
-    handleFault({ commit }, err) {
-        if(err.response.status == 401){
+    handleFault({ commit }, error) {
+        if(error.response.status == 401){
             commit('logout')
             userService.logout();
             location.reload(true);

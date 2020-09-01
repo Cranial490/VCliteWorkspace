@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     isNavVisible: function() {
-      if(this.$route.name === "Login" || this.$route.name === "Register1" || this.$route.name === "Register2" || this.$route.name === "Register3") {
+      if(this.$route.name === "Login" || this.$route.name === "Register1" || this.$route.name === "Register2" || this.$route.name === "Register3" || this.$route.name === "Forgot" || this.$route.name === "Forgot2" || this.$route.name === "changePassword" || this.$route.name === "changePassword2") {
         return false;
       }
       else {

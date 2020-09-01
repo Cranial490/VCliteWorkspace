@@ -3,7 +3,6 @@ from django.conf.urls import include
 
 from rest_framework import routers
 from django.conf.urls import url
-
 from .views import *
 
 router = routers.DefaultRouter()

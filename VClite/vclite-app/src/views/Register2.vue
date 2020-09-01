@@ -16,7 +16,7 @@
                 <div class="col-6 form-group CommentBox">
                     <ValidationProvider rules="required|min:10|max:10" v-slot="{ errors, valid }">
                         <b-input-group prepend="Pan Number">
-                        <b-form-input type="text" v-model="user.pan_no" name="panNo" :state="errors[0] ? false : (valid ? true : null)"/>
+                        <b-form-input type="text" v-model="user.pan_no" name="panNo" :state="errors[0] ? false : (valid ? true : null)"></b-form-input>
                         </b-input-group>
                         <b-form-invalid-feedback id="inputLiveFeedback2">{{ errors[0] }}</b-form-invalid-feedback>
                         </b-input-group>

@@ -21,6 +21,9 @@ from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 from rest_framework_jwt.views import verify_jwt_token
 from core_api.views import *
+from core_api.models import VC_T_User
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,4 +33,8 @@ urlpatterns = [
     url(r'^auth/refresh_token/', refresh_jwt_token),
     url(r'^auth/verify_token/', verify_jwt_token),
     url(r'^user/(?P<username>[\w-]+)/update_user', UserPartialUpdateView.as_view(), name='user_partial_update'),
+    url(r'^auth/reset-password/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    url(r'changePassword/(?P<username>[a-z0-9\-]+)/(?P<validation_key>[a-z0-9\-]+)/$',
+        ResetPassword.as_view(), name='reset-request'),
 ]
+

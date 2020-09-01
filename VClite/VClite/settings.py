@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_jwt',
+    'django_rest_passwordreset',
 ]
 
 MIDDLEWARE = [
@@ -64,7 +65,7 @@ ROOT_URLCONF = 'VClite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,6 +77,16 @@ TEMPLATES = [
         },
     },
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'akshaykhanna1997@gmail.com'
+#EMAIL_HOST_PASSWORD = 'Welcome@ibm1'
+EMAIL_HOST_PASSWORD = 'vqnjrtjvxzaweims'
+DEFAULT_FROM_EMAIL = 'akshaykhanna1997@gmail.com'
+SITE_URL = 'http://localhost:8081'
 
 WSGI_APPLICATION = 'VClite.wsgi.application'
 
@@ -97,7 +108,7 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=1000),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=50),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(seconds=6000),
 }
 
@@ -149,3 +160,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+class EmailSettings:
+    HEADER_COLOR = "#03a9f4"  # Material Blue 500
+    BG_COLOR = "#f5f5f5"  # Material Grey 100
+    CONTENT_COLOR = "#ffffff"  # White
+    HIGHLIGHT_COLOR = "#f5f5f5"  # Material Grey 100
+    LOGO_URL = "http://izeni.com/static/img/izeni-shadow.png"
+    LOGO_ALT_TEXT = ""
+    TERMS_URL = ""
+    PRIVACY_URL = ""
+    UNSUBSCRIBE_URL = ""
+    FONT_CSS = 'font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;'
+    FONT_CSS_HEADER = 'font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;'
+    
+EMAIL = EmailSettings()

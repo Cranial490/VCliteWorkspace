@@ -5,6 +5,10 @@ import Login from '../views/Login.vue'
 import Register1 from '../views/Register1.vue'
 import Register2 from '../views/Register2.vue'
 import Register3 from '../views/Register3.vue'
+import Forgot from '../views/Forgot.vue'
+import Forgot2 from '../views/Forgot2.vue'
+import changePassword from '../views/changePassword.vue'
+import changePassword2 from '../views/changePassword2.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +37,26 @@ Vue.use(VueRouter)
     path: '/register3',
     name: 'Register3',
     component: Register3
+  },
+  { 
+    path: '/forgot',
+    name: 'Forgot',
+    component: Forgot
+  },
+  { 
+    path: '/forgot2',
+    name: 'Forgot2',
+    component: Forgot2
+  },
+  { 
+    path: '/changePassword/:username/:validation_key/',
+    name: 'changePassword',
+    component: changePassword
+  },
+  { 
+    path: '/changePassword2',
+    name: 'changePassword2',
+    component: changePassword2
   },
   {
     path: '/positions',
@@ -84,11 +108,12 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  //console.log("to.path = ", to.path)
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ['/login', '/register1', '/register2', '/register3'];
-  const authRequired = !publicPages.includes(to.path);
+  const publicPages = ['/login', '/register1', '/register2', '/register3', '/forgot', '/forgot2', '/changePassword', '/changePassword2'];
+  const authRequired = !(publicPages.includes(to.path) || to.path.includes('changePassword'));
   const loggedIn = localStorage.getItem('user');
-
+  console.log("authrequired = ", authRequired)
   if (authRequired && !loggedIn) {
     return next('/login');
   }
