@@ -9,6 +9,7 @@ export const userService = {
     getAll,
     handleError,
     register2,
+    sendRegistrationEmail,
     //getById,
     //update
 };
@@ -86,6 +87,24 @@ function register(user) {
                 }
         }
         return Promise.reject(error);
+    })
+}
+
+
+function sendRegistrationEmail(user) {
+    console.log("inside sendemail")
+    const sendEmail = {
+        url: 'http://127.0.0.1:8000/apiv0/register/send_email/',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        data: {
+            username: user.username
+        }
+    };
+    return axios(sendEmail)
+    .then(res => {
+        console.log(res.data.message)
+        alert(res.data.message)
     })
 }
 

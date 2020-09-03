@@ -185,6 +185,7 @@ export default {
       };
         axios(axios_request)
         .then(response => (this.info = response.data))
+        .then(location.reload(true))
     },
     SellOrderConfirm() {
       console.log("dpid = ", this.userData[0].dpid)
@@ -219,7 +220,8 @@ export default {
         }
       };
         axios(axios_request)
-        .then(response => (this.info = response.data))
+        .then(response => {(this.info = response.data)})
+        .then(location.reload(true))
     },
   },
   computed: {

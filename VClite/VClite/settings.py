@@ -86,13 +86,13 @@ EMAIL_HOST_USER = 'akshaykhanna1997@gmail.com'
 #EMAIL_HOST_PASSWORD = 'Welcome@ibm1'
 EMAIL_HOST_PASSWORD = 'vqnjrtjvxzaweims'
 DEFAULT_FROM_EMAIL = 'akshaykhanna1997@gmail.com'
-SITE_URL = 'http://localhost:8081'
+SITE_URL = 'http://localhost:8082'
 
 WSGI_APPLICATION = 'VClite.wsgi.application'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = ['http://localhost:8080'
+CORS_ORIGIN_WHITELIST = ['http://localhost:8080', 'http://localhost:8082'
                          ]
 # TokenAuthentication dependency
 REST_FRAMEWORK = {
@@ -108,7 +108,7 @@ REST_FRAMEWORK = {
 JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_ALLOW_REFRESH': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=50),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=1000),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(seconds=6000),
 }
 

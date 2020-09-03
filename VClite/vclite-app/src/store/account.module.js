@@ -63,18 +63,23 @@ const actions = {
     },
 
     register2({ dispatch, commit }, user) {
+        console.log("dpid = ", user.dpid)
+        console.log("panNo = ", user.pan_no)
         // check router history and based on that if it comes from order window do router.push(/history window)
         if(user.dpid == "" && user.pan_no == ""){
             console.log("pressed skip")
             commit('registerSuccess', user)
             dispatch('alert/success', 'Registration successful', { root: true });
+            userService.sendRegistrationEmail(user)
             return
         }
         console.log("pressed continue")
         userService.register2(user)
         .then(
-            user => {
-                commit('registerSuccess', user)
+            resp => {
+                commit('registerSuccess', resp)
+                //send registration email
+                userService.sendRegistrationEmail(user)
                 router.push('/register3')
                 setTimeout(() => {
                     // display success message after route change completes

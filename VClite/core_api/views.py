@@ -92,7 +92,7 @@ class ResetPassword(APIView):
             response = {'message': 'Empty Password passed'}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
         user.set_password(password)
-        user.send_reset_password_success_email()
+        user.send_reset_password_success_email('Password successfully changed', 'user_reset_password_success', 'user_reset_password_success')
         response = {'message': 'Password Updated Successfully'}
         return Response(response, status=status.HTTP_200_OK)
 
@@ -355,6 +355,18 @@ class UserViewSet(viewsets.ModelViewSet):
                 response = {'message': 'Invalid data'}
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
+def getEmail(request):
+    if request.method == 'GET':
+        print("request = {}".format(request))
+        user = VC_T_User.objects.filter(username=request.data['username'])
+        if user is None:
+            response = {'message': 'User not found'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        response = {'email': user.email}
+        return Response(response, status=status.HTTP_200_OK)
+
+
+
 
 class UserPartialUpdateView(UpdateAPIView, UpdateModelMixin):
     '''
@@ -369,21 +381,28 @@ class UserPartialUpdateView(UpdateAPIView, UpdateModelMixin):
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
-    '''
-    @action(methods=['POST'], detail=False, url_path='validate_creds')
-    def validate_credentials(self, request):
-        print(request.user)
-        if request.method == 'POST':
-            if isEmailValid(request.user.email) and isPanNoValid(request.user.email, request.user.pan_no):
-                response = {'message': 'Provided Credentials are Valid'}
-                return Response(response, status=status.HTTP_200_OK)
-            else:
-                response = {'message': 'Invalid Credentials Provided'}
-                return Response(response, status=status.HTTP_400_BAD_REQUEST)
-    '''
 
 
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = VC_T_User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (AllowAny,)  # handle if directly accessed this link
+
+    @action (methods=['POST'], detail=False, url_path='send_email')
+    def send_email(self, request, *args, **kwargs):
+        print("request = {}".format(request))
+        Username = request.data['username']
+        if Username is None:
+            response = {'message': 'Invalid data'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        user = VC_T_User.objects.get(username=Username)
+        context = {
+            'url': settings.SITE_URL,
+            'username': user
+        }
+        email_html_message = render_to_string('email/user_registration.html', context)
+        email_plaintext_message = render_to_string('email/user_registration.txt', context)
+        user.send_reset_password_success_email('Registered Successfully', 'user_registration', 'user_registration')
+        response = {'message': 'Registration Successful'}
+        return Response(response, status=status.HTTP_200_OK)
+        

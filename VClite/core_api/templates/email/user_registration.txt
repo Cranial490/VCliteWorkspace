@@ -1,0 +1,1 @@
+Hi {{ username }}, You have registered successfully

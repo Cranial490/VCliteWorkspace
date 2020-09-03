@@ -14,7 +14,7 @@ class VC_T_User(AbstractUser):
     phone_no = models.CharField(max_length=10, unique=True)
     email = models.CharField(max_length=40, unique=True)
 
-    def send_reset_password_success_email(self):
+    def send_reset_password_success_email(self, subject, tempHTML, tempText):
         """
         Send email notifying users that their password was successfully reset.
         Validation key is cleared so the reset password link only works once.
@@ -22,9 +22,9 @@ class VC_T_User(AbstractUser):
         self.validation_key = None
         self.save()
         self._send_html_mail(
-            'Password successfully changed',
-            'email/user_reset_password_success.html',
-            'email/user_reset_password_success.txt')
+            subject,
+            'email/{}.html'.format(tempHTML),
+            'email/{}.txt'.format(tempText))
 
     def _send_html_mail(self, subject, template_html, template_text, **context):
         """
@@ -37,7 +37,9 @@ class VC_T_User(AbstractUser):
             raise ValueError('No text template provided for email.')
         default_context = {
             "settings": settings,
-            "user": self
+            #"user": self
+            'url': settings.SITE_URL,
+            'username': self
         }
         default_context.update(context)
         from_email = settings.DEFAULT_FROM_EMAIL

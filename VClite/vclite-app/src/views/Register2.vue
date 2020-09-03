@@ -23,7 +23,7 @@
                     </ValidationProvider>
                 </div>
                 <div class="form-group">
-                    <router-link class="btn btn-link" v-if="status.loggedIn == undefined" to="/register3">Skip</router-link>
+                    <router-link class="btn btn-link" v-if="status.loggedIn == undefined" @click.native="onSkipRegister" to="/register3">Skip</router-link>
                     <b-button pill variant="info" lg="4" class="pb-2" type="submit">Continue</b-button>
                 </div>
             </b-form>
@@ -39,6 +39,7 @@
 // "!status.loggedIn ? 'onSkipRegister' : ''"
 import { mapState, mapActions } from 'vuex'
 import { bus } from '../main'
+import axios from 'axios';
 
 export default {
     data () {
@@ -47,6 +48,7 @@ export default {
                 username: '',
                 dpid: '',
                 pan_no: '',
+                //email: '',
             },
         }
     },
@@ -57,6 +59,25 @@ export default {
         //})
         this.user.username = localStorage.getItem('Username')
         console.log("username = ", this.user.username)
+        /*const getEmail = {
+            url: 'http:127.0.0.1:8000/apiv0/user/getEmail/',
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            data: {
+                username: this.user.username
+            }
+        };
+        axios(getEmail)
+        .then(response => {
+            if(response.data.status == 400){
+                console.log(response.data.message)
+                alert(response.data.message)
+            }
+            else{
+                this.user.email = response.data.email
+            }
+        })
+        */
     },
     computed: {
         ...mapState('account', ['status']),
