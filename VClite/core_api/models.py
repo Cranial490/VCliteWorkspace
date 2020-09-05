@@ -167,7 +167,6 @@ class VC_T_Order_Queue(models.Model):
         VC_T_Order_Executed, on_delete=models.CASCADE, related_name='sellerOrder')
     price = models.FloatField()
     quantity = models.IntegerField()
-
     order_status = models.CharField(
         max_length=10,
         choices=OrderStatus.choices,
