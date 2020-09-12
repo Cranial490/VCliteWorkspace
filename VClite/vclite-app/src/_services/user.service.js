@@ -104,7 +104,7 @@ function sendRegistrationEmail(user) {
     return axios(sendEmail)
     .then(res => {
         console.log(res.data.message)
-        alert(res.data.message)
+        //alert(res.data.message)
     })
 }
 

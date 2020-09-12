@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework_jwt',
     'django_rest_passwordreset',
+    "phone_verify",
 ]
 
 MIDDLEWARE = [
@@ -86,13 +87,38 @@ EMAIL_HOST_USER = 'akshaykhanna1997@gmail.com'
 #EMAIL_HOST_PASSWORD = 'Welcome@ibm1'
 EMAIL_HOST_PASSWORD = 'vqnjrtjvxzaweims'
 DEFAULT_FROM_EMAIL = 'akshaykhanna1997@gmail.com'
-SITE_URL = 'http://localhost:8082'
+SITE_URL = 'http://localhost:8080'
+
+
+PHONE_VERIFICATION = {
+    "BACKEND": "phone_verify.backends.twilio.TwilioSandboxBackend",
+    #"BACKEND": "phone_verify.backends.base.BaseBackend",
+    #"BACKEND": "phone_verify.backends.nexmo.NexmoSandboxBackend",
+    "OPTIONS": {
+        "SID": "ACa2c1dd17bcc76d08fd27929cba1aa52b",
+        "SECRET": "906d898398ffbcdc29e68928651dcf75",
+        "FROM": "+12078058425",
+        "SANDBOX_TOKEN": "771183",
+    },
+    #"OPTIONS": {
+    #    "SID": "5e50365d",
+    #    "SECRET": "aShZUGi9q1iBmlsh",
+    #    "FROM": "+12078058425",
+    #    "SANDBOX_TOKEN": "771183",
+    #},
+    "TOKEN_LENGTH": 6,
+    "MESSAGE": "Welcome to VClite! Please use security code {security_code} to proceed.",
+    "APP_NAME": "Phone Verify",
+    "SECURITY_CODE_EXPIRATION_TIME": 60,  # In seconds only
+    "VERIFY_SECURITY_CODE_ONLY_ONCE": False,  # If False, then a security code can be used multiple times for verification
+}
+
 
 WSGI_APPLICATION = 'VClite.wsgi.application'
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = ['http://localhost:8080', 'http://localhost:8082'
+CORS_ORIGIN_WHITELIST = ['http://localhost:8080', 'http://localhost:8080','http://localhost:8082'
                          ]
 # TokenAuthentication dependency
 REST_FRAMEWORK = {

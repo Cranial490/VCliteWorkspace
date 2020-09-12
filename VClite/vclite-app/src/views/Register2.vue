@@ -48,36 +48,12 @@ export default {
                 username: '',
                 dpid: '',
                 pan_no: '',
-                //email: '',
             },
         }
     },
     created() {
-        //bus.$on('Username', (data) => {
-        //    console.log("data = ", data)
-        //    this.user.username = data;
-        //})
         this.user.username = localStorage.getItem('Username')
         console.log("username = ", this.user.username)
-        /*const getEmail = {
-            url: 'http:127.0.0.1:8000/apiv0/user/getEmail/',
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            data: {
-                username: this.user.username
-            }
-        };
-        axios(getEmail)
-        .then(response => {
-            if(response.data.status == 400){
-                console.log(response.data.message)
-                alert(response.data.message)
-            }
-            else{
-                this.user.email = response.data.email
-            }
-        })
-        */
     },
     computed: {
         ...mapState('account', ['status']),
@@ -91,11 +67,6 @@ export default {
         onSubmit() {
             this.$refs.form2.validate().then(valid => {
                 if (valid) {
-                    //console.log("this.status.loggedIn = ", true)
-                    //console.log("user = ", this.user)
-                    //console.log("user.username = ", this.user.username)
-                    //console.log("dpid = ", this.user.dpid)
-                    //console.log("pan_no = ", this.user.pan_no)
                     console.log("this.status.loggedIn = ", this.status.loggedIn)
                     if(this.status.loggedIn){
                         this.user.username = localStorage.getItem('userName')

@@ -403,6 +403,25 @@ class RegisterViewSet(viewsets.ModelViewSet):
         email_html_message = render_to_string('email/user_registration.html', context)
         email_plaintext_message = render_to_string('email/user_registration.txt', context)
         user.send_reset_password_success_email('Registered Successfully', 'user_registration', 'user_registration')
-        response = {'message': 'Registration Successful'}
+        response = {'message': 'Registration Email sent'}
         return Response(response, status=status.HTTP_200_OK)
+
+    @action(methods=['get'], detail=False, url_path='duplicates')
+    def get_current_details(self, request):
+        username = request.query_params.get('username')
+        phone_no = request.query_params.get('phone_no')
+        email = request.query_params.get('email')
+        if(username is not None and (VC_T_User.objects.filter(username=username).count() > 0)):
+            response = {'message': 'Username already exists'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        if(phone_no is not None and (VC_T_User.objects.filter(phone_no=phone_no).count() > 0)):
+            response = {'message': 'Phone Number already exists'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        if (email is not None and (VC_T_User.objects.filter(email=email).count() > 0)):
+            response = {'message': 'Email already exists'}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            response = {'message': 'Valid user'}
+            return Response(response, status=status.HTTP_200_OK)
+
         

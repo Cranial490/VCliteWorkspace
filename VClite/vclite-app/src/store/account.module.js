@@ -58,6 +58,7 @@ const actions = {
                 error => {
                     commit('registerFailure', error);
                     dispatch('alert/error', error, { root: true });
+                    location.reload(true);
                 }
             );
     },
@@ -71,20 +72,22 @@ const actions = {
             commit('registerSuccess', user)
             dispatch('alert/success', 'Registration successful', { root: true });
             userService.sendRegistrationEmail(user)
-            return
+            if(!alert("Registration Email sent"))
+                return
         }
         console.log("pressed continue")
         userService.register2(user)
         .then(
-            resp => {
+            (resp) => {
                 commit('registerSuccess', resp)
                 //send registration email
                 userService.sendRegistrationEmail(user)
-                router.push('/register3')
                 setTimeout(() => {
                     // display success message after route change completes
                     dispatch('alert/success', 'Registration successful', { root: true });
                 })
+                if(!alert("Registration Email sent"))
+                    router.push('/register3')
             },
             error => {
                 commit('registerFailure', error);

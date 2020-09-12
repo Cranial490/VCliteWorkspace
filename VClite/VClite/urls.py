@@ -28,6 +28,7 @@ from core_api.models import VC_T_User
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('apiv0/', include('core_api.urls')),
+    path('OTP/', include('phone_verify.urls')),
     #path('auth/', obtain_auth_token),
     url(r'^auth/obtain_token/', obtain_jwt_token),
     url(r'^auth/refresh_token/', refresh_jwt_token),
