@@ -58,7 +58,37 @@ class TwilioSandboxBackend(BaseBackend):
         return self._token
 
     def validate_security_code(self, security_code, phone_number, session_token):
+
+        stored_verification = SMSVerification.objects.filter(
+            security_code=security_code, phone_number=phone_number
+        ).first()
+        
+        # check security_code exists
+        if stored_verification is None:
+            return stored_verification, self.SECURITY_CODE_INVALID
+
+        # check session code exists
+        if not stored_verification.session_token == session_token:
+            return stored_verification, self.SESSION_TOKEN_INVALID
+
+        # check security_code is not expired
+        if self.check_security_code_expiry(stored_verification):
+            return stored_verification, self.SECURITY_CODE_EXPIRED
+
+        # check security_code is not verified
+        if stored_verification.is_verified and django_settings.PHONE_VERIFICATION.get(
+            "VERIFY_SECURITY_CODE_ONLY_ONCE"
+        ):
+            return stored_verification, self.SECURITY_CODE_VERIFIED
+
+        # mark security_code as verified
+        stored_verification.is_verified = True
+        stored_verification.save()
+
+        return stored_verification, self.SECURITY_CODE_VALID
+        '''
         if security_code == '771183':
             return SMSVerification.objects.none(), self.SECURITY_CODE_VALID
         else:
             return SMSVerification.objects.none(), self.SECURITY_CODE_INVALID
+        '''

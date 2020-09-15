@@ -78,7 +78,9 @@ class BaseBackend(metaclass=ABCMeta):
         :return session_token: string of session_token
         """
         security_code = self.generate_security_code()
+        print("randomly generated security code = {}".format(security_code))
         session_token = self.generate_session_token(number)
+        print("randomly generated session token = {}".format(session_token))
 
         # Delete old security_code(s) for phone_number if already exists
         SMSVerification.objects.filter(phone_number=number).delete()

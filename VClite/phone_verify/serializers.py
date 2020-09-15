@@ -38,14 +38,13 @@ class SMSVerificationSerializer(serializers.Serializer):
         )
 
 
-        if token_validatation == backend.SECURITY_CODE_INVALID:
-            raise serializers.ValidationError(_("Security code is Invalid"))
-        '''
+        if verification is None:
+            raise serializers.ValidationError(_("Security code is not valid"))
         elif token_validatation == backend.SESSION_TOKEN_INVALID:
             raise serializers.ValidationError(_("Session Token mis-match"))
         elif token_validatation == backend.SECURITY_CODE_EXPIRED:
             raise serializers.ValidationError(_("Security code has expired"))
         elif token_validatation == backend.SECURITY_CODE_VERIFIED:
             raise serializers.ValidationError(_("Security code is already verified"))
-        '''
+
         return attrs
