@@ -58,7 +58,7 @@
                 <form ref="form" @submit.stop.prevent="handleSubmit(onOTPModal)">
                     <div class="col-6 form-group CommentBox">
                     <b-input-group prepend="OTP">
-                    <b-form-input :state="OTPState" id="FormOTP" type="text" pattern="\d*" aria-placeholder="OTP" maxlength="6" name="OTP" v-model="phone.OTP" >
+                    <b-form-input :state="OTPState" id="FormOTP"  type="text" pattern="\d*" aria-placeholder="OTP" maxlength="6" name="OTP" v-model="phone.OTP" >
                     </b-form-input>
                     </b-input-group>
                     </div>
@@ -66,7 +66,7 @@
                         OTP verified successfully!
                     </span>
                     <span v-if="OTPVerified === 3" STYLE="color: red; font-size: 10pt">
-                        Invalid OTP, Try again
+                        {{ errorMessage }}
                     </span>
                 </form>
                 </b-modal>
@@ -179,6 +179,7 @@ export default {
                 session_token: '',
                 OTPVerified: 1,
                 Duplicates: false,
+                errorMessage: 'Invalid OTP, Try again',
         }
     },
     computed: {
@@ -219,9 +220,9 @@ export default {
         },
 
         onSubmit() {
-            this.$refs.form.validate().then((valid) => {
+            this.$refs.form.validate().then(async (valid) => {
                 if (valid) {
-                     this.checkifUserAlreadyExists()
+                     await this.checkifUserAlreadyExists()
                     .then(response => {
                         console.log(response)
                     })
@@ -308,7 +309,10 @@ export default {
             })
             .catch(error => {
                 this.OTPVerified = 3
-                console.log("Invalid OTP")
+                this.errorMessage = error.response.data.non_field_errors[0]
+                console.log(error.response.data.non_field_errors[0])
+                if(error.response.data.non_field_errors[0] == "Security code has expired")
+                    location.reload(true)
                 //return Promise.reject("Invalid OTP")
             })
         },
@@ -326,7 +330,8 @@ export default {
         handleOk(bvModalEvt) {
             bvModalEvt.preventDefault()
             console.log("inside handleOk")
-            this.onOTPModal()
+            if(this.phone.OTP.length > 0)
+                this.onOTPModal()
         }
 
     },

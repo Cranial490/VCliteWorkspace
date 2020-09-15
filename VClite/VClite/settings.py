@@ -109,7 +109,7 @@ PHONE_VERIFICATION = {
     "TOKEN_LENGTH": 6,
     "MESSAGE": "Welcome to VClite! Please use security code {security_code} to proceed.",
     "APP_NAME": "Phone Verify",
-    "SECURITY_CODE_EXPIRATION_TIME": 60,  # In seconds only
+    "SECURITY_CODE_EXPIRATION_TIME": 30,  # In seconds only
     "VERIFY_SECURITY_CODE_ONLY_ONCE": False,  # If False, then a security code can be used multiple times for verification
 }
 

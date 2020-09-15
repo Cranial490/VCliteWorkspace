@@ -4,11 +4,14 @@ from __future__ import absolute_import
 # Third Party Stuff
 from twilio.base.exceptions import TwilioRestException
 from twilio.rest import Client as TwilioRestClient
+from django.utils.crypto import get_random_string
+from django.conf import settings as django_settings
 
 # Local
 from .base import BaseBackend
 from phone_verify.models import SMSVerification
 
+DEFAULT_TOKEN_LENGTH = 6
 
 class TwilioBackend(BaseBackend):
     def __init__(self, **options):
@@ -55,7 +58,17 @@ class TwilioSandboxBackend(BaseBackend):
         """
         Returns a fixed security code
         """
-        return self._token
+        #return self._token
+        """
+        Returns a unique random `security_code` for given `TOKEN_LENGTH` in the settings.
+        """
+        token_length = django_settings.PHONE_VERIFICATION.get(
+            "TOKEN_LENGTH", DEFAULT_TOKEN_LENGTH
+        )
+
+        a = get_random_string(token_length, allowed_chars="0123456789")
+        print("random string = {}".format(a))
+        return a
 
     def validate_security_code(self, security_code, phone_number, session_token):
 

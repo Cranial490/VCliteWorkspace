@@ -40,6 +40,7 @@ class BaseBackend(metaclass=ABCMeta):
         token_length = django_settings.PHONE_VERIFICATION.get(
             "TOKEN_LENGTH", DEFAULT_TOKEN_LENGTH
         )
+
         return get_random_string(token_length, allowed_chars="0123456789")
 
     @classmethod
