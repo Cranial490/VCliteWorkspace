@@ -11,6 +11,7 @@ djangorestframework-jwt = "*"
 django-rest-passwordreset = "*"
 django-cors-headers = "*"
 djangorestframework = "*"
+django-phone-verify = "*"
 
 [requires]
 python_version = "3.8"

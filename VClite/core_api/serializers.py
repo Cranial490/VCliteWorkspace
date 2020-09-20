@@ -4,6 +4,9 @@ from .models import *
 from rest_framework.authtoken.models import Token
 
 
+class CustomTokenSerializer(serializers.Serializer):
+    token = serializers.CharField()
+
 class ShareSerializer(serializers.ModelSerializer):
     class Meta:
         model = VC_T_Share

@@ -31,8 +31,8 @@ const actions = {
         commit('logout');
     },
 
-    handleFault({ commit }, err) {
-        if(err.response.status == 401){
+    handleFault({ commit }, error) {
+        if(error.response.status == 401){
             commit('logout')
             userService.logout();
             location.reload(true);
@@ -58,28 +58,36 @@ const actions = {
                 error => {
                     commit('registerFailure', error);
                     dispatch('alert/error', error, { root: true });
+                    location.reload(true);
                 }
             );
     },
 
     register2({ dispatch, commit }, user) {
+        console.log("dpid = ", user.dpid)
+        console.log("panNo = ", user.pan_no)
         // check router history and based on that if it comes from order window do router.push(/history window)
         if(user.dpid == "" && user.pan_no == ""){
             console.log("pressed skip")
             commit('registerSuccess', user)
             dispatch('alert/success', 'Registration successful', { root: true });
-            return
+            userService.sendRegistrationEmail(user)
+            if(!alert("Registration Email sent"))
+                return
         }
         console.log("pressed continue")
         userService.register2(user)
         .then(
-            user => {
-                commit('registerSuccess', user)
-                router.push('/register3')
+            (resp) => {
+                commit('registerSuccess', resp)
+                //send registration email
+                userService.sendRegistrationEmail(user)
                 setTimeout(() => {
                     // display success message after route change completes
                     dispatch('alert/success', 'Registration successful', { root: true });
                 })
+                if(!alert("Registration Email sent"))
+                    router.push('/register3')
             },
             error => {
                 commit('registerFailure', error);

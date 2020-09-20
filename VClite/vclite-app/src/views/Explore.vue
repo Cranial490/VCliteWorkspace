@@ -12,7 +12,11 @@ import Carousel from '@/components/Carousel.vue'
 export default {
   components: {
   	Carousel
-  }
+  },
+
+created() {
+  this.$store.dispatch('getShares')
+},
 }
 </script>
 

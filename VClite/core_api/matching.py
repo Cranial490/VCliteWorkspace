@@ -207,4 +207,8 @@ def Trade(bid, ask, volume, parentOrder):
                                           quantity=bid.quantity)
 
     queueEntry.save()
+    print("share name = {}".format(bid.share.name))
+    print("share Id = {}".format(bid.share.id))
+    VC_T_Share.objects.filter(id = bid.share.id).update(ltp = bid.bid_price)
+    print("updated record = {}".format(VC_T_Share.objects.filter(id = bid.share.id)))
     return queueEntry

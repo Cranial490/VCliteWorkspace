@@ -3,39 +3,55 @@
     	<h1>EDIT</h1>
 
     	<div class="edit-form">
-		  <b-input-group size="mt-3" prepend="Username">
-		    <b-form-input v-model="username" readonly></b-form-input>
-		  </b-input-group>
+        <ValidationObserver ref="form" v-slot="{ handleSubmit }" >
+        <b-form @submit.prevent="handleSubmit(UpdateData)">
+            <b-input-group size="mt-3" prepend="Username">
+                <b-form-input v-model="username" readonly></b-form-input>
+            </b-input-group>
 
 		  <!-- Using slots -->
-		  <b-input-group class="mt-3" prepend="First Name">
-		    <b-form-input v-model="firstName" readonly></b-form-input>
-		  </b-input-group>
+            <b-input-group class="mt-3" prepend="First Name">
+                <b-form-input v-model="firstName" readonly></b-form-input>
+            </b-input-group>
 
 		  <!-- Using slots -->
-		  <b-input-group class="mt-3" prepend="Last Name">
-		    <b-form-input v-model="lastName" readonly></b-form-input>
-		  </b-input-group>
+            <b-input-group class="mt-3" prepend="Last Name">
+                <b-form-input v-model="lastName" readonly></b-form-input>
+            </b-input-group>
 
 		  <!-- Using slots -->
-		  <b-input-group class="mt-3" prepend="Email">
-		    <b-form-input v-model="Email"></b-form-input>
-		  </b-input-group>
+          <ValidationProvider rules="required|email" v-slot="{ errors, failedRules, valid }">
+            <b-input-group class="mt-3" prepend="Email">
+                <b-form-input v-model="Email" :state="errors[0] ? false : (valid ? true : null)"></b-form-input>
+                <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
+            </b-input-group>
+          </ValidationProvider>
 
 		  <!-- Using slots -->
-		  <b-input-group class="mt-3" prepend="Phone No.">
-		    <b-form-input v-model="phnNo"></b-form-input>
-		  </b-input-group>
+          <ValidationProvider rules="required|min:10|max:10" v-slot="{ errors, failedRules, valid }">
+            <b-input-group class="mt-3" prepend="Phone No.">
+                <b-form-input v-model="phnNo" :state="errors[0] ? false : (valid ? true : null)"></b-form-input>
+                <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
+            </b-input-group>
+          </ValidationProvider>
 
-		  <b-input-group class="mt-3" prepend="DPID">
-		    <b-form-input v-model="dpid"></b-form-input>
-		  </b-input-group>
+          <ValidationProvider rules="required|min:16|max:16" v-slot="{ errors, failedRules, valid }">
+            <b-input-group class="mt-3" prepend="DPID">
+                <b-form-input v-model="dpid" :state="errors[0] ? false : (valid ? true : null)"></b-form-input>
+                <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
+            </b-input-group>
+          </ValidationProvider>
 
-		  <b-input-group class="mt-3" prepend="PAN">
-		    <b-form-input v-model="pan"></b-form-input>
-		  </b-input-group>
+          <ValidationProvider rules="required|min:10|max:10" v-slot="{ errors, valid }">
+            <b-input-group class="mt-3" prepend="PAN">
+                <b-form-input v-model="pan" :state="errors[0] ? false : (valid ? true : null)"></b-form-input>
+                <b-form-invalid-feedback id="inputLiveFeedback2">{{ errors[0] }}</b-form-invalid-feedback>
+            </b-input-group>
+          </ValidationProvider>
 
-		  <b-button class="mt-3" variant="outline-primary" @click="UpdateData">Save</b-button>
+		    <b-button class="mt-3" variant="outline-primary" type="submit">Save</b-button>
+        </b-form>
+        </ValidationObserver>
 		</div>
 
 	</div>
@@ -45,7 +61,8 @@
 // @ is an alias to /src
 <script>
   	import axios from 'axios'
-	import { authHeader } from '../_helpers/auth-header'
+    import { authHeader } from '../_helpers/auth-header'
+    import { mapState, mapActions } from 'vuex'
 	export default {
 	data() {
 	  return {
@@ -59,8 +76,10 @@
 	  }
 	},
 	methods: {
+      ...mapActions('account', ['handleFault']),
 	  UpdateData() {
-	  	console.log("update initiated")
+        console.log("update initiated")
+        console.log("email = ", this.Email)
 	  	const axios_request = {
 	    url: 'http://127.0.0.1:8000/apiv0/user/update/',
 	    method: 'POST',
@@ -79,7 +98,7 @@
 	    .then(alert("Saved"))
 	    .then(this.$router.push('Home'))
 	    .then(this.$router.go())
-	    .catch(err => console.log(err));
+	    .catch(err => this.handleFault(err));
 	  }
 	}
 	}

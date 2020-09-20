@@ -3,7 +3,6 @@ from django.conf.urls import include
 
 from rest_framework import routers
 from django.conf.urls import url
-
 from .views import *
 
 router = routers.DefaultRouter()
@@ -21,4 +20,5 @@ urlpatterns = [
     path('', include(router.urls)),
     url(r'^user/(?P<username>[\w-]+)/update_user',
         UserPartialUpdateView.as_view(), name='user_partial_update'),
+    #url(r'^user/getEmail/$', 'getEmail', name = 'getEmail'),
 ]
