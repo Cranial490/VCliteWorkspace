@@ -14,13 +14,14 @@ class VC_T_User(AbstractUser):
     phone_no = models.CharField(max_length=10, unique=True)
     email = models.CharField(max_length=40, unique=True)
 
-    def send_reset_password_success_email(self, subject, tempHTML, tempText):
+    def send_reset_password_success_email(self, subject, tempHTML, tempText, actualReset):
         """
         Send email notifying users that their password was successfully reset.
         Validation key is cleared so the reset password link only works once.
         """
-        self.validation_key = None
-        self.save()
+        if(actualReset):
+            self.validation_key = None
+            self.save()
         self._send_html_mail(
             subject,
             'email/{}.html'.format(tempHTML),

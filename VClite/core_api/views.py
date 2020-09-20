@@ -92,7 +92,7 @@ class ResetPassword(APIView):
             response = {'message': 'Empty Password passed'}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
         user.set_password(password)
-        user.send_reset_password_success_email('Password successfully changed', 'user_reset_password_success', 'user_reset_password_success')
+        user.send_reset_password_success_email('Password successfully changed', 'user_reset_password_success', 'user_reset_password_success', True)
         response = {'message': 'Password Updated Successfully'}
         return Response(response, status=status.HTTP_200_OK)
 
@@ -402,7 +402,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
         }
         email_html_message = render_to_string('email/user_registration.html', context)
         email_plaintext_message = render_to_string('email/user_registration.txt', context)
-        user.send_reset_password_success_email('Registered Successfully', 'user_registration', 'user_registration')
+        user.send_reset_password_success_email('Registered Successfully', 'user_registration', 'user_registration', False)
         response = {'message': 'Registration Email sent'}
         return Response(response, status=status.HTTP_200_OK)
 
