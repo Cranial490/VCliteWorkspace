@@ -1,5 +1,16 @@
 # VCliteWorkspace
-Off market exchange
+VClite is a peer to peer trading platform meant mainly for pre-IPO shares.<br><br>
+![order flow](https://user-images.githubusercontent.com/23013907/181655440-e776dd34-7068-4c2c-b8cc-06d4af77e2e6.jpg)
+<br>
+Current version of VClite has
+- Login/Registration with OTP verification
+- Efficient order matching 
+- Notifying users of matched orders
+- Generating receipt for both parties
+
+Backend : Django, postgres, AWS RDS, AWS EC2 <br>
+Frontend: VueJS, AWS Amplify
+
 ```
 To get started
 - clone repo
@@ -10,8 +21,3 @@ To get started
 - npm install (To install dependencies from package.json)
 - npm run dev
 ```
-# REVIEW PROCESS:
-->Call to show added features.
-->Raise PR for master merge
-->Reviewer will checkout to the branch and check the added features locally and report bug if any in PR
-->After Getting approval merge the PR to master.
